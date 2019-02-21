@@ -8,13 +8,10 @@
   1100- JSON  format
 
 Required 
-
 Command, CommandType,ICID,Payload
 
-SQl
--
-
 Redis
+
 2.Get ICID_<packet.ICID>  (will give the queue)
 
 Queue
@@ -23,9 +20,6 @@ Queue
 Functional 
 1. command 1100
 4. Gets the details of the Of the key(ICID),packet
-
-validation
--
 
 FLow diagram:
 
