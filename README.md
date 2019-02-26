@@ -25,6 +25,10 @@
 - [SendLogs](#SendLogs)
 - [FirmwareUpdate](#FirmwareUpdate)
 - [AlmondNameChange](#AlmondNameChange)
+- [DynamicAlmondProperties](#DynamicAlmondProperties)
+- [AlmondProperties](#AlmondProperties)
+- [DynamicIndexUpdated](#DynamicIndexUpdated)
+- [DynamicDeviceUpdated](#DynamicDeviceUpdated)
 - [CommonToAll](#CommonToAll)
 <a name="RouterSummary"></a>
 ## 1.RouterSummary
@@ -46,8 +50,8 @@
     FLow:
      almondProtocol(packet)-> processor(do)->processor(validate)->almondUsers(dummyModel)->processor(dispatchResponses),processor(unicast)->broadcaster(unicast)
 
-<a name="DynamicIndexUpdated"></a>
-## 2.DynamicIndexUpdated
+<a name="UpdateDeviceIndex"></a>
+## 2.UpdateDeviceIndex
     Command no
     1063- JSON format
 
@@ -75,32 +79,38 @@
     Command,ICID,Payload
 
     Sql
-    3. Perform INSERT operation on AlmondUsers table having parameters userID, AlmondMAC, AlmondName, LongSecret, ownership ,FirmwareVersion, AffiliationTS
-    4. Perfrom INSERT operation on AlmondProperties2 table having parameters AlmondMAC,Properties,MobileProperties
-    5. Perform Select operation on Subscriptions table
-    6. Perform Update operation on Subscription table
-    7. Perform Select operation on UserTempPasswords table
+    3.INSERT on AlmondUsers
+      Parameters: userID,AlmondMAC,AlmondName,LongSecret,ownership,FirmwareVersion,AffiliationTS
+    
+    If(rows are affected)
+    4.INSERT on AlmondProperties2
+      Parameters: AlmondMAC,Properties,MobileProperties
+    5.Select on Subscriptions
+
+    else
+    6.Update on Subscription
+
+    check alexa compatible
+    7.Select on UserTempPasswords
 
     Redis
-    2. Get CODE:code  
+    2.Get CODE:<code>  
+    8.Perform multi:
+       i. hmset on UID_<UserId>
+       ii. hmset on AL_<pMAC>
+       iii. hdel on AL_<pMAC>
 
-    8. Perform hmset on UID_UserId
-    9. Perform hmset on AL_pMAC
-    10.Perfrom hdel on AL_pMAC
-
-    14. Perform Get on ICID_<packet.ICID>
-    16. Perfrom hgetall on UID_<user_list>
+    11.Get on ICID_<packet.ICID>
+    13.hgetall on UID_<user_list>
 
     Queue
-    15. Send the ICID_<packet.ICID> to queue 
-    17. Send <user_list>.Substring(Q_length),user_list),Payload to queue
+    12.Send the ICID_<packet.ICID> to queue 
+    14.Send (<user_list>.Substring(Q_length),user_list),st) to queue
 
     Functional
     1.Command 25
-    11.Perform multi on addPrimaryAlmond query
-    12.Delete affiliationStore[id]
-    13.Destroy Socket
-
+    9.Delete affiliationStore[id]
+    10.Destroy Socket
 
     Flow
     almondProtocol(packet)-> processor(do)->processor(validate)->almondUsers(affiliation_almond_complete),almondUsers(verify_affiliation_complete)-> processor(dispatchResponses),processor(unicast)->broadcaster(unicast)->processor(broadcaster)->broadcaster(send)
@@ -525,8 +535,8 @@
     Flow
     almondProtocol(packet)-> processor(do)->processor(validate)->almondUsers(dummyModel)->processor(dispatchResponses) , processor(unicast)->broadcaster(unicast)
     
-<a name="AlmondModeChange"></a>
-## 25.AlmondModeChange
+<a name="AlmondNameChange"></a>
+## 25.AlmondNameChange
     Command no
     63- JSON format
    
@@ -544,9 +554,99 @@
 
     Flow
     almondProtocol(packet)-> processor(do)->processor(validate)->almondUsers(dummyModel)->processor(dispatchResponses),processor(unicast)->broadcaster(unicast)
+    
+<a name="DynamicAlmondProperties"></a>
+## 26.DynamicAlmondProperties
+    Command no
+    1050- JSON format
+   
+    Required
+    Command,ICID,Payload
+
+    Redis
+    2.hmset AL_<AlmondMac> 
+
+    Queue
+    3.Send the packet AL_<AlmondMac> to queue
+    4.Send BACKGROUND_QUEUE,properties to queue
+
+    Functional
+    1. Command 1050
+
+    Flow
+    almondProtocol(packet)-> processor(do)->processor(validate)->almondUsers(properties)->processor(dispatchResponses),processor(sendToBackground)->broadcaster(sendToBackground)
+
+<a name="AlmondProperties"></a>
+## 27.AlmondProperties
+    Command no
+    1050- JSON format
+   
+    Required
+    Command,ICID,Payload
+
+    Redis
+    2.hmset AL_<AlmondMac> 
+
+    Queue
+    3.Send the packet AL_<AlmondMac> to queue
+    4.Send BACKGROUND_QUEUE,properties to queue
+
+    Functional
+    1.Command 1050
+
+    Flow
+    almondProtocol(packet)-> processor(do)->processor(validate)->almondUsers(properties)->processor(dispatchResponses),processor(sendToBackground)->broadcaster(sendToBackground)
+
+<a name="DynamicIndexUpdated"></a>
+## 28.DynamicIndexUpdated
+    Command no
+    1200- JSON format
+   
+    Required
+    Command,ICID,Payload
+
+    Redis
+    3.hmset on AL_<AlmondMac>
+    7.hgetall on UID_<user_list> 
+
+    Queue
+    4.Send config.ALEXA_QUEUE,DynamicIndexUpdated to queue
+    6.Send BACKGROUND_QUEUE,devices to queue
+    8.Send UID_<user_list>,response to queue
+
+    Functional
+    1.Command 1200
+    2.delete socket[mapper.hashColumn]
+    5.delete packet.alexa
+
+    Flow
+    almondProtocol(packet)-> processor(do)->processor(validate)->almondUsers(execute)->processor(dispatchResponses),processor(sendToBackground)->broadcaster(sendToBackground)->processor(broadcast)
+
+<a name="DynamicDeviceUpdated"></a>
+## 29.DynamicDeviceUpdated
+    Command no
+    1200- JSON format
+   
+    Required
+    Command,ICID,Payload
+
+    Redis
+    3.hmset on AL_<AlmondMac>
+    5.hgetall on UID_<user_list> 
+
+    Queue
+    4.Send BACKGROUND_QUEUE,devices to queue
+    6.Send UID_<user_list>,response to queue
+
+    Functional
+    1.Command 1200
+    2.delete socket[mapper.hashColumn]
+
+    Flow
+    almondProtocol(packet)-> processor(do)->processor(validate)->almondUsers(execute)->processor(dispatchResponses),processor(sendToBackground)->broadcaster(sendToBackground)->processor(broadcast)
 
 <a name="CommonToAll"></a>
-## 26.CommonToAll
+## 30.CommonToAll
 
     2. Checks if the packet.command is present, if not then return.
     3. Compares the indexOf packet.command with -1 and evaluates it with socket.almondMAC ,if not then return.
