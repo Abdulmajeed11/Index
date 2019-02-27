@@ -117,7 +117,7 @@
 
     Queue
     12.Send the ICID_<packet.ICID> to queue 
-    14.Send (<user_list>.Substring(Q_length),user_list),response) to queue
+    14.Send response to (<user_list>.Substring(Q_length),user_list))
 
     Functional
     1.Command 25
@@ -577,11 +577,13 @@
 
     Redis
     2.hmset AL_<AlmondMac> 
+    5.hgetall on UID_<user_list>
 
     Queue
     3.Send the packet AL_<AlmondMac> to queue
     4.Send DynamicAlmondProperties to BACKGROUND_QUEUE
-
+    6.Send response to (<user_list>.Substring(Q_length),user_list))
+    
     Functional
     1. Command 1050
 
@@ -598,10 +600,12 @@
 
     Redis
     2.hmset AL_<AlmondMac> 
+    5.hgetall on UID_<user_list>
 
     Queue
     3.Send the packet AL_<AlmondMac> to queue
     4.Send AlmondProperties to BACKGROUND_QUEUE
+    6.Send response to (<user_list>.Substring(Q_length),user_list))
 
     Functional
     1.Command 1050
@@ -624,7 +628,7 @@
     Queue
     4.Send DynamicIndexUpdated to config.ALEXA_QUEUE
     6.Send DynamicIndexUpdated to BACKGROUND_QUEUE
-    8.Send UID_<user_list>,response to queue
+    8.Send response to UID_<user_list>
 
     Functional
     1.Command 1200
@@ -648,7 +652,7 @@
 
     Queue
     4.Send DynamicDeviceUpdated to BACKGROUND_QUEUE
-    6.Send UID_<user_list>,response to queue
+    6.Send response to UID_<user_list> 
 
     Functional
     1.Command 1200
@@ -671,7 +675,7 @@
 
     Queue
     4.Send DynamicSceneAdded to BACKGROUND_QUEUE
-    6.Send (<user_list>.Substring(Q_length),user_list),response) to queue
+    6.Send response to (<user_list>.Substring(Q_length),user_list))
 
     Functional
     1.Command 1300
@@ -694,7 +698,7 @@
 
     Queue
     4.Send DynamicSceneActivated to BACKGROUND_QUEUE
-    6.Send (<user_list>.Substring(Q_length),user_list),response) to queue
+    6.Send response to (<user_list>.Substring(Q_length),user_list))
 
     Functional
     1.Command 1300
@@ -717,7 +721,7 @@
 
     Queue
     4.Send DynamicSceneUpdated to BACKGROUND_QUEUE
-    6.Send (<user_list>.Substring(Q_length),user_list),response) to queue
+    6.Send response to (<user_list>.Substring(Q_length),user_list))
 
     Functional
     1.Command 1300
@@ -740,7 +744,7 @@
 
     Queue
     4.Send DynamicSceneRemoved to BACKGROUND_QUEUE
-    6.Send (<user_list>.Substring(Q_length),user_list),response) to queue
+    6.Send response to (<user_list>.Substring(Q_length),user_list))
 
     Functional
     1.Command 1300
@@ -763,7 +767,7 @@
 
     Queue
     4.Send DynamicAllSceneRemoved to BACKGROUND_QUEUE
-    6.Send (<user_list>.Substring(Q_length),user_list),response) to queue
+    6.Send response to (<user_list>.Substring(Q_length),user_list))
 
     Functional
     1.Command 1300
@@ -786,7 +790,7 @@
 
     Queue
     4.Send DynamicRuleAdded to BACKGROUND_QUEUE
-    6.Send (<user_list>.Substring(Q_length),user_list),response) to queue
+    6.Send response to (<user_list>.Substring(Q_length),user_list))
 
     Functional
     1.Command 1400
@@ -809,7 +813,7 @@
 
     Queue
     4.Send DynamicRuleUpdated to BACKGROUND_QUEUE
-    6.Send (<user_list>.Substring(Q_length),user_list),response) to queue
+    6.Send response to (<user_list>.Substring(Q_length),user_list))
 
     Functional
     1.Command 1400
@@ -832,7 +836,7 @@
 
     Queue
     4.Send DynamicRuleRemoved to BACKGROUND_QUEUE
-    6.Send (<user_list>.Substring(Q_length),user_list),response) to queue
+    6.Send response to (<user_list>.Substring(Q_length),user_list))
 
     Functional
     1.Command 1400
@@ -855,7 +859,7 @@
 
     Queue
     4.Send DynamicAllRulesRemoved to BACKGROUND_QUEUE
-    6.Send (<user_list>.Substring(Q_length),user_list),response) to queue
+    6.Send response to (<user_list>.Substring(Q_length),user_list))
 
     Functional
     1.Command 1400
@@ -878,7 +882,7 @@
 
     Queue
     4.Send DynamicClientAdded to BACKGROUND_QUEUE
-    6.Send (<user_list>.Substring(Q_length),user_list),response) to queue
+    6.Send response to (<user_list>.Substring(Q_length),user_list))
 
     Functional
     1.Command 1500
@@ -901,7 +905,7 @@
 
     Queue
     4.Send DynamicClientUpdated to BACKGROUND_QUEUE
-    6.Send (<user_list>.Substring(Q_length),user_list),response) to queue
+    6.Send response to (<user_list>.Substring(Q_length),user_list))
 
     Functional
     1.Command 1500
@@ -924,7 +928,7 @@
 
     Queue
     4.Send DynamicClientRemoved to BACKGROUND_QUEUE
-    6.Send (<user_list>.Substring(Q_length),user_list),response) to queue
+    6.Send response to (<user_list>.Substring(Q_length),user_list))
 
     Functional
     1.Command 1500
