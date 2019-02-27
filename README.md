@@ -29,17 +29,29 @@
 - [AlmondProperties](#AlmondProperties)
 - [DynamicIndexUpdated](#DynamicIndexUpdated)
 - [DynamicDeviceUpdated](#DynamicDeviceUpdated)
+- [DynamicSceneAdded](#DynamicSceneAdded)
+- [DynamicSceneActivated](#DynamicSceneActivated)
+- [DynamicSceneUpdated](#DynamicSceneUpdated)
+- [DynamicSceneRemoved](#DynamicSceneRemoved)
+- [DynamicAllSceneRemoved](#DynamicAllSceneRemoved)
+- [DynamicRuleAdded](#DynamicRuleAdded)
+- [DynamicRuleUpdated](#DynamicRuleUpdated)
+- [DynamicRuleRemoved](#DynamicRuleRemoved)
+- [DynamicAllRulesRemoved](#DynamicAllRulesRemoved) 
+- [DyanamicClientAdded](#DynamicClientAdded)
+- [DynamicClientUpdated](#DynamicClientUpdated)
+- [DynamicClientRemoved](#DynamicClientRemoved)
 - [CommonToAll](#CommonToAll)
 <a name="RouterSummary"></a>
 ## 1.RouterSummary
     Command no 
-    1100- JSON  format
+    1100- JSON format
  
     Required 
     Command,CommandType,ICID,Payload
 
     Redis
-    2.Get ICID_<packet.ICID>  (will give the queue)
+    2.Get ICID_<packet.ICID>
 
     Queue
     3.send the ICID packet to queue
@@ -55,11 +67,11 @@
     Command no
     1063- JSON format
 
-    **Required**
+    Required
     Command,ICID,Payload
 
     Redis
-    2.Get ICID_<packet.ICID>  (will give the queue)
+    2.Get ICID_<packet.ICID>
 
     Queue
     3.Send the packet ICID to queue
@@ -68,7 +80,7 @@
     1.Command 1063  
 
     Flow
-    almondProtocol(packet)-> processor(do)->processor(validate)->almondUsers(dummyModel)->processor(dispatchResponses) , processor(unicast)->broadcaster(unicast)
+    almondProtocol(packet)-> processor(do)->processor(validate)->almondUsers(dummyModel)->processor(dispatchResponses),processor(unicast)->broadcaster(unicast)
     
 <a name="AffiliationAlmondComplete"></a>
 ## 3.AffiliationAlmondComplete
@@ -105,7 +117,7 @@
 
     Queue
     12.Send the ICID_<packet.ICID> to queue 
-    14.Send (<user_list>.Substring(Q_length),user_list),st) to queue
+    14.Send (<user_list>.Substring(Q_length),user_list),response) to queue
 
     Functional
     1.Command 25
@@ -144,7 +156,7 @@
     Command,ICID,Payload
 
     Redis
-    2.Get ICID_<packet.ICID>  (will give the queue)
+    2.Get ICID_<packet.ICID>
 
     Queue
     3.Send the packet ICID to queue
@@ -164,7 +176,7 @@
     Command,ICID,Payload
 
     Redis
-    2.Get ICID_<packet.ICID>  (will give the queue)
+    2.Get ICID_<packet.ICID> 
 
     Queue
     3.Send the packet ICID to queue
@@ -184,7 +196,7 @@
     Command,ICID,Payload
 
     Redis
-    2.Get ICID_<packet.ICID>  (will give the queue)
+    2.Get ICID_<packet.ICID> 
 
     Queue
     3.Send the packet ICID to queue
@@ -204,7 +216,7 @@
     Command,ICID,Payload
 
     Redis
-    2.Get ICID_<packet.ICID>  (will give the queue)
+    2.Get ICID_<packet.ICID>
 
     Queue
     3.Send the packet ICID to queue
@@ -224,7 +236,7 @@
     Command,ICID,Payload
 
     Redis
-    2.Get ICID_<packet.ICID>  (will give the queue)
+    2.Get ICID_<packet.ICID> 
 
     Queue
     3.Send the packet ICID to queue
@@ -244,7 +256,7 @@
     Command,ICID,Payload
 
     Redis
-    2.Get ICID_<packet.ICID>  (will give the queue)
+    2.Get ICID_<packet.ICID> 
 
     Queue
     3.Send the packet ICID to queue
@@ -264,7 +276,7 @@
     Command,ICID,Payload
 
     Redis
-    2.Get ICID_<packet.ICID>  (will give the queue)
+    2.Get ICID_<packet.ICID> 
 
     Queue
     3.Send the packet ICID to queue
@@ -284,7 +296,7 @@
     Command,ICID,Payload
 
     Redis
-    2.Get ICID_<packet.ICID>  (will give the queue)
+    2.Get ICID_<packet.ICID>
 
     Queue
     3.Send the packet ICID to queue
@@ -304,7 +316,7 @@
     Command,ICID,Payload
 
     Redis
-    2.Get ICID_<packet.ICID>  (will give the queue)
+    2.Get ICID_<packet.ICID> 
 
     Queue
     3.Send the packet ICID to queue
@@ -324,7 +336,7 @@
     Command,ICID,Payload
 
     Redis
-    2.Get ICID_<packet.ICID>  (will give the queue)
+    2.Get ICID_<packet.ICID>
 
     Queue
     3.Send the packet ICID to queue
@@ -344,7 +356,7 @@
     Command,ICID,Payload
 
     Redis
-    2.Get ICID_<packet.ICID>  (will give the queue)
+    2.Get ICID_<packet.ICID>
 
     Queue
     3.Send the packet ICID to queue
@@ -364,7 +376,7 @@
     Command,ICID,Payload
 
     Redis
-    2.Get ICID_<packet.ICID>  (will give the queue)
+    2.Get ICID_<packet.ICID>
 
     Queue
     3.Send the packet ICID to queue
@@ -384,7 +396,7 @@
     Command,ICID,Payload
 
     Redis
-    2.Get ICID_<packet.ICID>  (will give the queue)
+    2.Get ICID_<packet.ICID>
 
     Queue
     3.Send the packet ICID to queue
@@ -404,7 +416,7 @@
     Command,ICID,Payload
 
     Redis
-    2.Get ICID_<packet.ICID>  (will give the queue)
+    2.Get ICID_<packet.ICID>
 
     Queue
     3.Send the packet ICID to queue
@@ -424,7 +436,7 @@
     Command,ICID,Payload
 
     Redis
-    2.Get ICID_<packet.ICID>  (will give the queue)
+    2.Get ICID_<packet.ICID> 
 
     Queue
     3.Send the packet ICID to queue
@@ -444,7 +456,7 @@
     Command,ICID,Payload
 
     Redis
-    2.Get ICID_<packet.ICID>  (will give the queue)
+    2.Get ICID_<packet.ICID>
 
     Queue
     3.Send the packet ICID to queue
@@ -464,7 +476,7 @@
     Command,ICID,Payload
 
     Redis
-    2.Get ICID_<packet.ICID>  (will give the queue)
+    2.Get ICID_<packet.ICID> 
 
     Queue
     3.Send the packet ICID to queue
@@ -484,7 +496,7 @@
     Command,ICID,Payload
 
     Redis
-    2.Get ICID_<packet.ICID>  (will give the queue)
+    2.Get ICID_<packet.ICID> 
 
     Queue
     3.Send the packet ICID to queue
@@ -504,7 +516,7 @@
     Command,ICID,Payload
 
     Redis
-    2.Get ICID_<packet.ICID>  (will give the queue)
+    2.Get ICID_<packet.ICID>
 
     Queue
     3.Send the packet ICID to queue
@@ -524,7 +536,7 @@
     Command,ICID,Payload
 
     Redis
-    2.Get ICID_<packet.ICID>  (will give the queue)
+    2.Get ICID_<packet.ICID>
 
     Queue
     3.Send the packet ICID to queue
@@ -561,14 +573,14 @@
     1050- JSON format
    
     Required
-    Command,ICID,Payload
+    Command,AlmondMac,Payload
 
     Redis
     2.hmset AL_<AlmondMac> 
 
     Queue
     3.Send the packet AL_<AlmondMac> to queue
-    4.Send BACKGROUND_QUEUE,properties to queue
+    4.Send DynamicAlmondProperties to BACKGROUND_QUEUE
 
     Functional
     1. Command 1050
@@ -582,14 +594,14 @@
     1050- JSON format
    
     Required
-    Command,ICID,Payload
+    Command,AlmondMac,Payload
 
     Redis
     2.hmset AL_<AlmondMac> 
 
     Queue
     3.Send the packet AL_<AlmondMac> to queue
-    4.Send BACKGROUND_QUEUE,properties to queue
+    4.Send AlmondProperties to BACKGROUND_QUEUE
 
     Functional
     1.Command 1050
@@ -603,15 +615,15 @@
     1200- JSON format
    
     Required
-    Command,ICID,Payload
+    Command,UID,AlmondMac,Payload
 
     Redis
     3.hmset on AL_<AlmondMac>
     7.hgetall on UID_<user_list> 
 
     Queue
-    4.Send config.ALEXA_QUEUE,DynamicIndexUpdated to queue
-    6.Send BACKGROUND_QUEUE,devices to queue
+    4.Send DynamicIndexUpdated to config.ALEXA_QUEUE
+    6.Send DynamicIndexUpdated to BACKGROUND_QUEUE
     8.Send UID_<user_list>,response to queue
 
     Functional
@@ -620,7 +632,7 @@
     5.delete packet.alexa
 
     Flow
-    almondProtocol(packet)-> processor(do)->processor(validate)->almondUsers(execute)->processor(dispatchResponses),processor(sendToBackground)->broadcaster(sendToBackground)->processor(broadcast)
+    almondProtocol(packet)-> processor(do)->processor(validate)->almondUsers(execute)->processor(dispatchResponses),processor(sendToBackground)->broadcaster(sendToBackground)->processor(broadcast)->broadcaster(send)
 
 <a name="DynamicDeviceUpdated"></a>
 ## 29.DynamicDeviceUpdated
@@ -628,14 +640,14 @@
     1200- JSON format
    
     Required
-    Command,ICID,Payload
+    Command,UID,AlmondMac,Payload
 
     Redis
     3.hmset on AL_<AlmondMac>
     5.hgetall on UID_<user_list> 
 
     Queue
-    4.Send BACKGROUND_QUEUE,devices to queue
+    4.Send DynamicDeviceUpdated to BACKGROUND_QUEUE
     6.Send UID_<user_list>,response to queue
 
     Functional
@@ -643,10 +655,286 @@
     2.delete socket[mapper.hashColumn]
 
     Flow
-    almondProtocol(packet)-> processor(do)->processor(validate)->almondUsers(execute)->processor(dispatchResponses),processor(sendToBackground)->broadcaster(sendToBackground)->processor(broadcast)
+    almondProtocol(packet)-> processor(do)->processor(validate)->almondUsers(execute)->processor(dispatchResponses),processor(sendToBackground)->broadcaster(sendToBackground)->processor(broadcast)->broadcaster(send)
+    
+<a name="DynamicSceneAdded"></a>
+## 30.DynamicSceneAdded
+    Command no
+    1300- JSON format
+   
+    Required
+    Command,UID,AlmondMac,Payload
+
+    Redis
+    3.hmset on AL_<AlmondMac>
+    5.hgetall on UID_<user_list>
+
+    Queue
+    4.Send DynamicSceneAdded to BACKGROUND_QUEUE
+    6.Send (<user_list>.Substring(Q_length),user_list),response) to queue
+
+    Functional
+    1.Command 1300
+    2.delete socket[mapper.hashColumn]
+
+    Flow
+    almondProtocol(packet)-> processor(do)->processor(validate)->almondUsers(execute)->processor(dispatchResponses),processor(sendToBackground)->broadcaster(sendToBackground)->processor(broadcast)->broadcaster(send)
+
+<a name="DynamicSceneActivated"></a>
+## 31.DynamicSceneActivated
+    Command no
+    1300- JSON format
+   
+    Required
+    Command,UID,AlmondMac,Payload
+
+    Redis
+    3.hmset on AL_<AlmondMac>
+    5.hgetall on UID_<user_list>
+
+    Queue
+    4.Send DynamicSceneActivated to BACKGROUND_QUEUE
+    6.Send (<user_list>.Substring(Q_length),user_list),response) to queue
+
+    Functional
+    1.Command 1300
+    2.delete socket[mapper.hashColumn]
+
+    Flow
+    almondProtocol(packet)-> processor(do)->processor(validate)->almondUsers(execute)->processor(dispatchResponses),processor(sendToBackground)->broadcaster(sendToBackground)->processor(broadcast)->broadcaster(send)
+
+<a name="DynamicSceneUpdated"></a>
+## 32.DynamicSceneUpdated
+    Command no
+    1300- JSON format
+   
+    Required
+    Command,UID,AlmondMac,Payload
+
+    Redis
+    3.hmset on AL_<AlmondMac>
+    5.hgetall on UID_<user_list>
+
+    Queue
+    4.Send DynamicSceneUpdated to BACKGROUND_QUEUE
+    6.Send (<user_list>.Substring(Q_length),user_list),response) to queue
+
+    Functional
+    1.Command 1300
+    2.delete socket[mapper.hashColumn]
+
+    Flow
+    almondProtocol(packet)-> processor(do)->processor(validate)->almondUsers(execute)->processor(dispatchResponses),processor(sendToBackground)->broadcaster(sendToBackground)->processor(broadcast)->broadcaster(send)
+
+<a name="DynamicSceneRemoved"></a>
+## 33.DynamicSceneRemoved
+    Command no
+    1300- JSON format
+   
+    Required
+    Command,UID,AlmondMac,Payload
+
+    Redis
+    3.hmset on AL_<AlmondMac>
+    5.hgetall on UID_<user_list>
+
+    Queue
+    4.Send DynamicSceneRemoved to BACKGROUND_QUEUE
+    6.Send (<user_list>.Substring(Q_length),user_list),response) to queue
+
+    Functional
+    1.Command 1300
+    2.delete socket[mapper.hashColumn]
+
+    Flow
+    almondProtocol(packet)-> processor(do)->processor(validate)->almondUsers(execute)->processor(dispatchResponses),processor(sendToBackground)->broadcaster(sendToBackground)->processor(broadcast)->broadcaster(send)
+
+<a name="DynamicAllSceneRemoved"></a>
+## 34.DynamicAllSceneRemoved
+    Command no
+    1300- JSON format
+   
+    Required
+    Command,UID,AlmondMac,Payload
+
+    Redis
+    3.hmset on AL_<AlmondMac>
+    5.hgetall on UID_<user_list>
+
+    Queue
+    4.Send DynamicAllSceneRemoved to BACKGROUND_QUEUE
+    6.Send (<user_list>.Substring(Q_length),user_list),response) to queue
+
+    Functional
+    1.Command 1300
+    2.delete socket[mapper.hashColumn]
+
+    Flow
+    almondProtocol(packet)-> processor(do)->processor(validate)->almondUsers(execute)->processor(dispatchResponses),processor(sendToBackground)->broadcaster(sendToBackground)->processor(broadcast)->broadcaster(send)
+
+<a name="DynamicRuleAdded"></a>
+## 35.DynamicRuleAdded
+    Command no
+    1400- JSON format
+
+    Required
+    Command,UID,AlmondMac,Payload
+
+    Redis
+    3.hmset on AL_<AlmondMac>
+    5.hgetall on UID_<user_list>
+
+    Queue
+    4.Send DynamicRuleAdded to BACKGROUND_QUEUE
+    6.Send (<user_list>.Substring(Q_length),user_list),response) to queue
+
+    Functional
+    1.Command 1400
+    2.delete socket[mapper.hashColumn]
+
+    Flow
+    almondProtocol(packet)-> processor(do)->processor(validate)->almondUsers(execute)->processor(dispatchResponses),processor(sendToBackground)->broadcaster(sendToBackground)->processor(broadcast)->broadcaster(send)
+
+<a name="DynamicRuleUpdated"></a>
+## 36.DynamicRuleUpdated
+    Command no
+    1400- JSON format
+
+    Required
+    Command,UID,AlmondMac,Payload
+
+    Redis
+    3.hmset on AL_<AlmondMac>
+    5.hgetall on UID_<user_list>
+
+    Queue
+    4.Send DynamicRuleUpdated to BACKGROUND_QUEUE
+    6.Send (<user_list>.Substring(Q_length),user_list),response) to queue
+
+    Functional
+    1.Command 1400
+    2.delete socket[mapper.hashColumn]
+
+    Flow
+    almondProtocol(packet)-> processor(do)->processor(validate)->almondUsers(execute)->processor(dispatchResponses),processor(sendToBackground)->broadcaster(sendToBackground)->processor(broadcast)->broadcaster(send)
+
+<a name="DynamicRuleRemoved"></a>
+## 37.DynamicRuleRemoved
+    Command no
+    1400- JSON format
+
+    Required
+    Command,UID,AlmondMac,Payload
+
+    Redis
+    3.hmset on AL_<AlmondMac>
+    5.hgetall on UID_<user_list>
+
+    Queue
+    4.Send DynamicRuleRemoved to BACKGROUND_QUEUE
+    6.Send (<user_list>.Substring(Q_length),user_list),response) to queue
+
+    Functional
+    1.Command 1400
+    2.delete socket[mapper.hashColumn]
+
+    Flow
+    almondProtocol(packet)-> processor(do)->processor(validate)->almondUsers(execute)->processor(dispatchResponses),processor(sendToBackground)->broadcaster(sendToBackground)->processor(broadcast)->broadcaster(send)
+
+<a name="DynamicAllRulesRemoved"></a>
+## 38.DynamicAllRulesRemoved
+    Command no
+    1400- JSON format
+
+    Required
+    Command,UID,AlmondMac,Payload
+
+    Redis
+    3.hmset on AL_<AlmondMac>
+    5.hgetall on UID_<user_list>
+
+    Queue
+    4.Send DynamicAllRulesRemoved to BACKGROUND_QUEUE
+    6.Send (<user_list>.Substring(Q_length),user_list),response) to queue
+
+    Functional
+    1.Command 1400
+    2.delete socket[mapper.hashColumn]
+
+    Flow
+    almondProtocol(packet)-> processor(do)->processor(validate)->almondUsers(execute)->processor(dispatchResponses),processor(sendToBackground)->broadcaster(sendToBackground)->processor(broadcast)->broadcaster(send)
+
+<a name="DynamicClientAdded"></a>
+## 39.DynamicClientAdded
+    Command no
+    1500- JSON format
+
+    Required
+    Command,UID,AlmondMac,Payload
+
+    Redis
+    3.hmset on AL_<AlmondMac>
+    5.hgetall on UID_<user_list>
+
+    Queue
+    4.Send DynamicClientAdded to BACKGROUND_QUEUE
+    6.Send (<user_list>.Substring(Q_length),user_list),response) to queue
+
+    Functional
+    1.Command 1500
+    2.delete socket[mapper.hashColumn]
+
+    Flow
+    almondProtocol(packet)-> processor(do)->processor(validate)->almondUsers(execute)->processor(dispatchResponses),processor(sendToBackground)->broadcaster(sendToBackground)->processor(broadcast)->broadcaster(send)
+
+<a name="DynamicClientUpdated"></a>
+## 40.DynamicClientUpdated
+    Command no
+    1500- JSON format
+
+    Required
+    Command,UID,AlmondMac,Payload
+
+    Redis
+    3.hmset on AL_<AlmondMac>
+    5.hgetall on UID_<user_list>
+
+    Queue
+    4.Send DynamicClientUpdated to BACKGROUND_QUEUE
+    6.Send (<user_list>.Substring(Q_length),user_list),response) to queue
+
+    Functional
+    1.Command 1500
+    2.delete socket[mapper.hashColumn]
+
+    Flow
+    almondProtocol(packet)-> processor(do)->processor(validate)->almondUsers(execute)->processor(dispatchResponses),processor(sendToBackground)->broadcaster(sendToBackground)->processor(broadcast)->broadcaster(send)
+
+<a name="DynamicClientRemoved"></a>
+## 41.DynamicClientRemoved
+    Command no
+    1500- JSON format
+
+    Required
+    Command,UID,AlmondMac,Payload
+
+    Redis
+    3.hmset on AL_<AlmondMac>
+    5.hgetall on UID_<user_list>
+
+    Queue
+    4.Send DynamicClientRemoved to BACKGROUND_QUEUE
+    6.Send (<user_list>.Substring(Q_length),user_list),response) to queue
+
+    Functional
+    1.Command 1500
+    2.delete socket[mapper.hashColumn]
+
+    Flow
+    almondProtocol(packet)-> processor(do)->processor(validate)->almondUsers(execute)->processor(dispatchResponses),processor(sendToBackground)->broadcaster(sendToBackground)->processor(broadcast)->broadcaster(send)
 
 <a name="CommonToAll"></a>
-## 30.CommonToAll
+## 42.CommonToAll
 
     2. Checks if the packet.command is present, if not then return.
     3. Compares the indexOf packet.command with -1 and evaluates it with socket.almondMAC ,if not then return.
