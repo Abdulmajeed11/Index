@@ -7,22 +7,12 @@ AddRule,ValidateRule,UpdateRule,RemoveRule,RemoveAllRules,UpdateClient,RemoveCli
 - [AlmondModeChange](#AlmondModeChange)
 - [AlmondNameChange](#AlmondNameChange)
 - [AlmondProperties](#AlmondProperties)
-- [Dynamic commands](#DynamicCommands)
-  - [DynamicAlmondProperties](#DynamicAlmondProperties)
-  - [DynamicIndexUpdated](#DynamicIndexUpdated)
-  - [DynamicDeviceUpdated](#DynamicDeviceUpdated)
-  - [DynamicSceneAdded](#DynamicSceneAdded)
-  - [DynamicSceneActivated](#DynamicSceneActivated)
-  - [DynamicSceneUpdated](#DynamicSceneUpdated)
-  - [DynamicSceneRemoved](#DynamicSceneRemoved)
-  - [DynamicAllSceneRemoved](#DynamicAllSceneRemoved)
-  - [DynamicRuleAdded](#DynamicRuleAdded)
-  - [DynamicRuleUpdated](#DynamicRuleUpdated)
-  - [DynamicRuleRemoved](#DynamicRuleRemoved)
-  - [DynamicAllRulesRemoved](#DynamicAllRulesRemoved) 
-  - [DyanamicClientAdded](#DynamicClientAdded)
-  - [DynamicClientUpdated](#DynamicClientUpdated)
-  - [DynamicClientRemoved](#DynamicClientRemoved)
+- [Dynamic commands:](#DynamicCommands)
+  - [DynamicAlmondProperties](#DynamicAlmondProperties),[DynamicIndexUpdated](#DynamicIndexUpdated),[DynamicDeviceUpdated](#DynamicDeviceUpdated),[DynamicSceneAdded](#DynamicSceneAdded),
+  [DynamicSceneActivated](#DynamicSceneActivated),[DynamicSceneUpdated](#DynamicSceneUpdated),[DynamicSceneRemoved](#DynamicSceneRemoved),[DynamicAllSceneRemoved](#DynamicAllSceneRemoved),
+  [DynamicRuleAdded](#DynamicRuleAdded),[DynamicRuleUpdated](#DynamicRuleUpdated),[DynamicRuleRemoved](#DynamicRuleRemoved),[DynamicAllRulesRemoved](#DynamicAllRulesRemoved),
+  [DyanamicClientAdded](#DynamicClientAdded),[DynamicClientUpdated](#DynamicClientUpdated),[DynamicClientRemoved](#DynamicClientRemoved)
+    
 - [CommonToAll](#CommonToAll)
 
 <a name="1100"></a>
