@@ -3,16 +3,15 @@
 - [RouterSummary,GetWirelessSettings,SetWirelessSettings,RebootRouter,SendLogs,FirmwareUpdate (Command 1100)](#1100)
 - [UpdateDeviceIndex,UpdateDeviceName,AddScene,ActiveScene,UpdateScene,RemoveScene,RemoveAlllScenes,
 AddRule,ValidateRule,UpdateRule,RemoveRule,RemoveAllRules,UpdateClient,RemoveClient (Command 1063)](#1063)
-- [AffiliationAlmondComplete](#AffiliationAlmondComplete)
-- [AlmondModeChange](#AlmondModeChange)
-- [AlmondNameChange](#AlmondNameChange)
-- [AlmondProperties](#AlmondProperties)
+- [AffiliationAlmondComplete (Command 25)](#25)
+- [AlmondModeChange (Command 63)](#63)
+- [AlmondNameChange Command 63)](#63)
+- [AlmondProperties (Command 1050)](#1050)
 - [Dynamic commands:](#DynamicCommands)
-  - [DynamicAlmondProperties](#DynamicAlmondProperties),[DynamicIndexUpdated](#DynamicIndexUpdated),[DynamicDeviceUpdated](#DynamicDeviceUpdated),[DynamicSceneAdded](#DynamicSceneAdded),
-  [DynamicSceneActivated](#DynamicSceneActivated),[DynamicSceneUpdated](#DynamicSceneUpdated),[DynamicSceneRemoved](#DynamicSceneRemoved),[DynamicAllSceneRemoved](#DynamicAllSceneRemoved),
-  [DynamicRuleAdded](#DynamicRuleAdded),[DynamicRuleUpdated](#DynamicRuleUpdated),[DynamicRuleRemoved](#DynamicRuleRemoved),[DynamicAllRulesRemoved](#DynamicAllRulesRemoved),
-  [DyanamicClientAdded](#DynamicClientAdded),[DynamicClientUpdated](#DynamicClientUpdated),[DynamicClientRemoved](#DynamicClientRemoved)
-    
+  - [DynamicAlmondProperties (Command 1050)](#1050),[DynamicIndexUpdated (Command 1200)](#1200),[DynamicDeviceUpdated (Command 1200)](#1200),[DynamicSceneAdded (Command 1300)](#1300),
+  [DynamicSceneActivated (Command 1300)](#1300),[DynamicSceneUpdated (Command 1300)](#1300),[DynamicSceneRemoved (Command 1300)](#1300),[DynamicAllSceneRemoved (Commnad 1300)](#1300),
+  [DynamicRuleAdded (Command 1400)](#1400),[DynamicRuleUpdated (Command 1400)](#1400),[DynamicRuleRemoved (Command 1400)](#1400),[DynamicAllRulesRemoved (Command 1400)](#1400),
+  [DyanamicClientAdded (Command 1500)](#1500),[DynamicClientUpdated (Command 1500)](#1500),[DynamicClientRemoved (Command 1500)](#1500)  
 - [CommonToAll](#CommonToAll)
 
 <a name="1100"></a>
@@ -30,7 +29,7 @@ AddRule,ValidateRule,UpdateRule,RemoveRule,RemoveAllRules,UpdateClient,RemoveCli
     3.send ICID to queue
 
     Functional 
-    1. command 1100
+    1.Command 1100
 
     FLow:
     almondProtocol(packet)-> processor(do)->processor(validate)->almondUsers(dummyModel)->processor(dispatchResponses),processor(unicast)->broadcaster(unicast)
@@ -50,13 +49,13 @@ AddRule,ValidateRule,UpdateRule,RemoveRule,RemoveAllRules,UpdateClient,RemoveCli
     3.send ICID to queue
 
     Functional 
-    1. command 1100
+    1.Command 1100
 
     FLow:
     almondProtocol(packet)-> processor(do)->processor(validate)->almondUsers(dummyModel)->processor(dispatchResponses),processor(unicast)->broadcaster(unicast)
     
-<a name="AffiliationAlmondComplete"></a>
-## 3.AffiliationAlmondComplete
+<a name="25"></a>
+## 3.Command 25
     Command no
     25- JSON format
 
@@ -102,8 +101,8 @@ AddRule,ValidateRule,UpdateRule,RemoveRule,RemoveAllRules,UpdateClient,RemoveCli
     Flow
     almondProtocol(packet)-> processor(do)->processor(validate)->almondUsers(affiliation_almond_complete),almondUsers(verify_affiliation_complete)-> processor(dispatchResponses),processor(unicast)->broadcaster(unicast)->processor(broadcaster)->broadcaster(send)
       
-<a name="AlmondModeChange"></a>
-## 4.AlmondModeChange
+<a name="63"></a>
+## 4.Command 63 (AlmondModeChange)
     Command no
     63- JSON format
    
@@ -125,8 +124,8 @@ AddRule,ValidateRule,UpdateRule,RemoveRule,RemoveAllRules,UpdateClient,RemoveCli
     almondProtocol(packet)-> processor(do)->processor(validate)->almondUsers(dummyModel)->processor(dispatchResponses),processor(unicast)->broadcaster(unicast)
     
  
-<a name="AlmondNameChange"></a>
-## 5.AlmondNameChange
+<a name="63"></a>
+## 5.Command 63 (AlmondNameChange)
     Command no
     63- JSON format
    
@@ -147,8 +146,8 @@ AddRule,ValidateRule,UpdateRule,RemoveRule,RemoveAllRules,UpdateClient,RemoveCli
     Flow
     almondProtocol(packet)-> processor(do)->processor(validate)->almondUsers(dummyModel)->processor(dispatchResponses),processor(unicast)->broadcaster(unicast)
 
-<a name="AlmondProperties"></a>
-## 6.AlmondProperties
+<a name="1050"></a>
+## 6.Command 1050 (AlmondProperties)
     Command no
     1050- JSON format
    
@@ -172,8 +171,8 @@ AddRule,ValidateRule,UpdateRule,RemoveRule,RemoveAllRules,UpdateClient,RemoveCli
 
 <a name="DynamicCommands"></a>
 ## 7.DynamicCommands
-<a name="DynamicAlmondProperties"></a>
-## a)DynamicAlmondProperties
+<a name="1050"></a>
+## a)Command 1050 (DynamicAlmondProperties)
     Command no
     1050- JSON format
    
@@ -196,8 +195,8 @@ AddRule,ValidateRule,UpdateRule,RemoveRule,RemoveAllRules,UpdateClient,RemoveCli
     almondProtocol(packet)->processor(do)->processor(validate)->almondUsers(properties)->processor(dispatchResponses),processor(sendToBackground)->broadcaster(sendToBackground)
 
 
-<a name="DynamicIndexUpdated"></a>
-## b)DynamicIndexUpdated
+<a name="1200"></a>
+## b)Command 1200 (DynamicIndexUpdated)
     Command no
     1200- JSON format
    
@@ -221,8 +220,8 @@ AddRule,ValidateRule,UpdateRule,RemoveRule,RemoveAllRules,UpdateClient,RemoveCli
     Flow
     almondProtocol(packet)-> processor(do)->processor(validate)->almondUsers(execute)->processor(dispatchResponses),processor(sendToBackground)->broadcaster(sendToBackground)->processor(broadcast)->broadcaster(send)
 
-<a name="DynamicDeviceUpdated"></a>
-## c)DynamicDeviceUpdated
+<a name="1200"></a>
+## c)Command 1200 (DynamicDeviceUpdated)
     Command no
     1200- JSON format
    
@@ -244,8 +243,8 @@ AddRule,ValidateRule,UpdateRule,RemoveRule,RemoveAllRules,UpdateClient,RemoveCli
     Flow
     almondProtocol(packet)-> processor(do)->processor(validate)->almondUsers(execute)->processor(dispatchResponses),processor(sendToBackground)->broadcaster(sendToBackground)->processor(broadcast)->broadcaster(send)
 
-<a name="DynamicSceneAdded"></a>
-## d)DynamicSceneAdded
+<a name="1300"></a>
+## d)Command 1300 (DynamicSceneAdded)
     Command no
     1300- JSON format
    
@@ -266,8 +265,8 @@ AddRule,ValidateRule,UpdateRule,RemoveRule,RemoveAllRules,UpdateClient,RemoveCli
     Flow
     almondProtocol(packet)-> processor(do)->processor(validate)->almondUsers(execute)->processor(dispatchResponses),processor(sendToBackground)->broadcaster(sendToBackground)->processor(broadcast)->broadcaster(send)
 
-<a name="DynamicSceneActivated"></a>
-## e)DynamicSceneActivated
+<a name="1300"></a>
+## e)Command 1300 (DynamicSceneActivated)
     Command no
     1300- JSON format
    
@@ -289,8 +288,8 @@ AddRule,ValidateRule,UpdateRule,RemoveRule,RemoveAllRules,UpdateClient,RemoveCli
     Flow
     almondProtocol(packet)-> processor(do)->processor(validate)->almondUsers(execute)->processor(dispatchResponses),processor(sendToBackground)->broadcaster(sendToBackground)->processor(broadcast)->broadcaster(send)
 
-<a name="DynamicSceneUpdated"></a>
-## f)DynamicSceneUpdated
+<a name="1300"></a>
+## f)Command 1300 (DynamicSceneUpdated)
     Command no
     1300- JSON format
    
@@ -312,8 +311,8 @@ AddRule,ValidateRule,UpdateRule,RemoveRule,RemoveAllRules,UpdateClient,RemoveCli
     Flow
     almondProtocol(packet)->processor(do)->processor(validate)->almondUsers(execute)->processor(dispatchResponses),processor(sendToBackground)->broadcaster(sendToBackground)->processor(broadcast)->broadcaster(send)
 
-<a name="DynamicSceneRemoved"></a>
-## g)DynamicSceneRemoved
+<a name="1300"></a>
+## g)Command 1300 (DynamicSceneRemoved)
     Command no
     1300- JSON format
    
@@ -335,8 +334,8 @@ AddRule,ValidateRule,UpdateRule,RemoveRule,RemoveAllRules,UpdateClient,RemoveCli
     Flow
     almondProtocol(packet)->processor(do)->processor(validate)->almondUsers(execute)->processor(dispatchResponses),processor(sendToBackground)->broadcaster(sendToBackground)->processor(broadcast)->broadcaster(send)
 
-<a name="DynamicAllSceneRemoved"></a>
-## h)DynamicAllSceneRemoved
+<a name="1300"></a>
+## h)Command 1300 (DynamicAllSceneRemoved)
     Command no
     1300- JSON format
    
@@ -358,8 +357,8 @@ AddRule,ValidateRule,UpdateRule,RemoveRule,RemoveAllRules,UpdateClient,RemoveCli
     Flow
     almondProtocol(packet)->processor(do)->processor(validate)->almondUsers(execute)->processor(dispatchResponses),processor(sendToBackground)->broadcaster(sendToBackground)->processor(broadcast)->broadcaster(send)
 
-<a name="DynamicRuleAdded"></a>
-## i)DynamicRuleAdded
+<a name="1400"></a>
+## i)Command 1400 (DynamicRuleAdded)
     Command no
     1400- JSON format
 
@@ -381,8 +380,8 @@ AddRule,ValidateRule,UpdateRule,RemoveRule,RemoveAllRules,UpdateClient,RemoveCli
     Flow
     almondProtocol(packet)->processor(do)->processor(validate)->almondUsers(execute)->processor(dispatchResponses),processor(sendToBackground)->broadcaster(sendToBackground)->processor(broadcast)->broadcaster(send)
 
-<a name="DynamicRuleUpdated"></a>
-## j)DynamicRuleUpdated
+<a name="1400"></a>
+## j)Command 1400 (DynamicRuleUpdated)
     Command no
     1400- JSON format
 
@@ -404,8 +403,8 @@ AddRule,ValidateRule,UpdateRule,RemoveRule,RemoveAllRules,UpdateClient,RemoveCli
     Flow
     almondProtocol(packet)->processor(do)->processor(validate)->almondUsers(execute)->processor(dispatchResponses),processor(sendToBackground)->broadcaster(sendToBackground)->processor(broadcast)->broadcaster(send)
 
-<a name="DynamicRuleRemoved"></a>
-## k)DynamicRuleRemoved
+<a name="1400"></a>
+## k)Command 1400 (DynamicRuleRemoved)
     Command no
     1400- JSON format
 
@@ -427,8 +426,8 @@ AddRule,ValidateRule,UpdateRule,RemoveRule,RemoveAllRules,UpdateClient,RemoveCli
     Flow
     almondProtocol(packet)->processor(do)->processor(validate)->almondUsers(execute)->processor(dispatchResponses),processor(sendToBackground)->broadcaster(sendToBackground)->processor(broadcast)->broadcaster(send)
 
-<a name="DynamicAllRulesRemoved"></a>
-## l)DynamicAllRulesRemoved
+<a name="1400"></a>
+## l)Command 1400 (DynamicAllRulesRemoved)
     Command no
     1400- JSON format
 
@@ -450,8 +449,8 @@ AddRule,ValidateRule,UpdateRule,RemoveRule,RemoveAllRules,UpdateClient,RemoveCli
     Flow
     almondProtocol(packet)->processor(do)->processor(validate)->almondUsers(execute)->processor(dispatchResponses),processor(sendToBackground)->broadcaster(sendToBackground)->processor(broadcast)->broadcaster(send)
 
-<a name="DynamicClientAdded"></a>
-## m)DynamicClientAdded
+<a name="1500"></a>
+## m)Command 1500 (DynamicClientAdded)
     Command no
     1500- JSON format
 
@@ -459,7 +458,7 @@ AddRule,ValidateRule,UpdateRule,RemoveRule,RemoveAllRules,UpdateClient,RemoveCli
     Command,UID,AlmondMac,Payload
 
     Redis
-    2.hmset on AL_<AlmondMac>       (done on RM.updateAlmond)
+    2.hmset on AL_<AlmondMac>           (done on RM.updateAlmond)
     5.hgetall on UID_<user_list>
 
     Queue
@@ -473,8 +472,8 @@ AddRule,ValidateRule,UpdateRule,RemoveRule,RemoveAllRules,UpdateClient,RemoveCli
     Flow
     almondProtocol(packet)->processor(do)->processor(validate)->almondUsers(execute)->processor(dispatchResponses),processor(sendToBackground)->broadcaster(sendToBackground)->processor(broadcast)->broadcaster(send)
 
-<a name="DynamicClientUpdated"></a>
-## n)DynamicClientUpdated
+<a name="1500"></a>
+## n)Command 1500 (DynamicClientUpdated)
     Command no
     1500- JSON format
 
@@ -496,8 +495,8 @@ AddRule,ValidateRule,UpdateRule,RemoveRule,RemoveAllRules,UpdateClient,RemoveCli
     Flow
     almondProtocol(packet)-> processor(do)->processor(validate)->almondUsers(execute)->processor(dispatchResponses),processor(sendToBackground)->broadcaster(sendToBackground)->processor(broadcast)->broadcaster(send)
 
-<a name="DynamicClientRemoved"></a>
-## o)DynamicClientRemoved
+<a name="1500"></a>
+## o)Command 1500 (DynamicClientRemoved)
     Command no
     1500- JSON format
 
@@ -505,7 +504,7 @@ AddRule,ValidateRule,UpdateRule,RemoveRule,RemoveAllRules,UpdateClient,RemoveCli
     Command,UID,AlmondMac,Payload
 
     Redis
-    2.hmset on AL_<AlmondMac>    (done on RM.updateAlmond)
+    2.hmset on AL_<AlmondMac>        (done on RM.updateAlmond)
     5.hgetall on UID_<user_list>
 
     Queue
