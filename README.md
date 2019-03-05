@@ -7,8 +7,8 @@ AddRule,ValidateRule,UpdateRule,RemoveRule,RemoveAllRules,UpdateClient,RemoveCli
 - [AlmondModeChange (Command 63)](#63)
 - [AlmondNameChange (Command 63)](#63)
 - [AlmondProperties (Command 1050)](#1050)
-- [AlmondHello (Command 1040)] (#1040)
-- [AlmondHello (Command 31)] (#31)
+- [AlmondHello (Command 1040)](#1040)
+- [AlmondHello (Command 31)](#31)
 - [Dynamic commands:](#DynamicCommands)
   - [DynamicAlmondProperties (Command 1050)](#1050),[DynamicIndexUpdated (Command 1200)](#1200),[DynamicDeviceUpdated (Command 1200)](#1200),[DynamicSceneAdded (Command 1300)](#1300),
   [DynamicSceneActivated (Command 1300)](#1300),[DynamicSceneUpdated (Command 1300)](#1300),[DynamicSceneRemoved (Command 1300)](#1300),[DynamicAllSceneRemoved (Commnad 1300)](#1300),
