@@ -5,8 +5,10 @@
 AddRule,ValidateRule,UpdateRule,RemoveRule,RemoveAllRules,UpdateClient,RemoveClient (Command 1063)](#1063)
 - [AffiliationAlmondComplete (Command 25)](#25)
 - [AlmondModeChange (Command 63)](#63)
-- [AlmondNameChange Command 63)](#63)
+- [AlmondNameChange (Command 63)](#63)
 - [AlmondProperties (Command 1050)](#1050)
+- [AlmondHello (Command 1040)] (#1040)
+- [AlmondHello (Command 31)] (#31)
 - [Dynamic commands:](#DynamicCommands)
   - [DynamicAlmondProperties (Command 1050)](#1050),[DynamicIndexUpdated (Command 1200)](#1200),[DynamicDeviceUpdated (Command 1200)](#1200),[DynamicSceneAdded (Command 1300)](#1300),
   [DynamicSceneActivated (Command 1300)](#1300),[DynamicSceneUpdated (Command 1300)](#1300),[DynamicSceneRemoved (Command 1300)](#1300),[DynamicAllSceneRemoved (Commnad 1300)](#1300),
@@ -23,7 +25,7 @@ AddRule,ValidateRule,UpdateRule,RemoveRule,RemoveAllRules,UpdateClient,RemoveCli
     Command,CommandType,ICID,Payload
 
     Redis
-    2.Get ICID_<packet.ICID>             (done on RM.redisExecute)
+    2.Get ICID_<packet.ICID>              (M.ICID + packet.ICID)
 
     Queue
     3.send ICID to queue
@@ -43,7 +45,7 @@ AddRule,ValidateRule,UpdateRule,RemoveRule,RemoveAllRules,UpdateClient,RemoveCli
     Command,CommandType,ICID,Payload
 
     Redis
-    2.Get ICID_<packet.ICID>             (done on RM.redisExecute)
+    2.Get ICID_<packet.ICID>             (M.ICID + packet.ICID)
 
     Queue
     3.send ICID to queue
@@ -78,11 +80,11 @@ AddRule,ValidateRule,UpdateRule,RemoveRule,RemoveAllRules,UpdateClient,RemoveCli
     7.Select on UserTempPasswords
 
     Redis
-    2.Get CODE:<code>               (done on RM.getCode)
+    2.Get CODE:<code>                 (M.CODE + code)
     8.Perform multi:
-       i. hmset on UID_<UserId>
-       ii. hmset on AL_<pMAC>
-       iii. hdel on AL_<pMAC>
+       i. hmset on UID_<UserID>          (M.USER + UserID)
+       ii. hmset on AL_<pMAC>            (M.ALMOND + pMAC)
+       iii. hdel on AL_<pMAC>            (M.ALMOND + pMAC)
 
     12.Get ICID_<packet.ICID>
     14.hgetall on UID_<user_list>
@@ -110,8 +112,8 @@ AddRule,ValidateRule,UpdateRule,RemoveRule,RemoveAllRules,UpdateClient,RemoveCli
     Command,ICID,UID,Payload
 
     Redis
-    2.Get ICID_<packet.ICID>     (done on RM.redisExecute)
-    4.hgetall on UID_<user_list>
+    2.Get ICID_<packet.ICID>              (M.ICID + packet.ICID)
+    4.hgetall on UID_<user_list>          (M.USER + user_list)
 
     Queue
     3.Send ICID to queue
@@ -133,8 +135,8 @@ AddRule,ValidateRule,UpdateRule,RemoveRule,RemoveAllRules,UpdateClient,RemoveCli
     Command,ICID,UID,Payload
 
     Redis
-    2.Get ICID_<packet.ICID>            (done on RM.redisExecute)
-    4.hgetall on UID_<user_list>
+    2.Get ICID_<packet.ICID>             (M.ICID + packet.ICID)
+    4.hgetall on UID_<user_list>         (M.USER + user_list)
 
     Queue
     3.Send ICID to queue
@@ -152,11 +154,11 @@ AddRule,ValidateRule,UpdateRule,RemoveRule,RemoveAllRules,UpdateClient,RemoveCli
     1050- JSON format
    
     Required
-    Command,AlmondMac,Payload
+    Command,AlmondMAC,Payload
 
     Redis
-    2.hmset AL_<AlmondMac>          (done on RM.UpdateAlmond)
-    5.hgetall on UID_<user_list>
+    2.hmset AL_<AlmondMAC>               (M.ALMOND + AlmondMAC)
+    5.hgetall on UID_<user_list>         (M.USER + user_list)
     
     Queue
     4.Send AlmondProperties to BACKGROUND_QUEUE 
@@ -169,19 +171,73 @@ AddRule,ValidateRule,UpdateRule,RemoveRule,RemoveAllRules,UpdateClient,RemoveCli
     Flow
     almondProtocol(packet)->processor(do)->processor(validate)->almondUsers(properties)->processor(dispatchResponses),processor(sendToBackground)->broadcaster(sendToBackground)
 
+<a name="1040"></a>
+## 7.Command 1040 (AlmondHello)
+     Command no
+     1040- JSON format
+
+     Required
+     Command,UID,AlmondMAC,Payload
+
+     Redis
+     2.hgetall on AL_<AlmondMAC>          (M.Almond+AlmondMAC)
+     5.Perform multi:
+       i. hmset on UID_<UserID>          (M.USER + UserID)
+       ii. hmset on AL_<pMAC>            (M.ALMOND + pMAC)
+       iii. hdel on AL_<pMAC>            (M.ALMOND + pMAC)
+
+     SQl
+     3.Select on AlmondUsers
+       Parameters: AlmondMAC
+     4.Select on AlmondSecondaryUsers
+       Parameters: AlmondMAC
+
+     Functional
+     1.Command 1050
+
+     Flow
+     almondProtocol(packet)->processor(do)->processor(validate)->almondUsers(almond_hello)
+     
+<a name="31"></a>
+## 8.Command 31 (AlmondHello)
+     Command no
+     1040- JSON format
+
+     Required
+     Command,UID,AlmondMAC,Payload
+
+     Redis
+     2.hgetall on AL_<AlmondMAC>          (M.Almond+AlmondMAC)
+     5.Perform multi:
+       i. hmset on UID_<UserID>          (M.USER + UserID)
+       ii. hmset on AL_<pMAC>            (M.ALMOND + pMAC)
+       iii. hdel on AL_<pMAC>            (M.ALMOND + pMAC)
+
+     SQl
+     3.Select on AlmondUsers
+     Parameters: AlmondMAC
+     4.Select on AlmondSecondaryUsers
+     Parameters: AlmondMAC
+
+     Functional
+     1.Command 1050
+
+     Flow
+     almondProtocol(packet)->processor(do)->processor(validate)->almondUsers(almond_hello)
+
 <a name="DynamicCommands"></a>
-## 7.DynamicCommands
+## 9.DynamicCommands
 <a name="1050"></a>
 ## a)Command 1050 (DynamicAlmondProperties)
     Command no
     1050- JSON format
    
     Required
-    Command,AlmondMac,Payload
+    Command,AlmondMAC,Payload
 
     Redis
-    2.hmset AL_<AlmondMac>         (done on RM.UpdateAlmond)
-    5.hgetall on UID_<user_list>
+    2.hmset AL_<AlmondMAC>               (M.ALMOND + AlmondMAC)
+    5.hgetall on UID_<user_list>         (M.USER + user_list)
 
     Queue
     4.Send DynamicAlmondProperties to BACKGROUND_QUEUE
@@ -201,11 +257,11 @@ AddRule,ValidateRule,UpdateRule,RemoveRule,RemoveAllRules,UpdateClient,RemoveCli
     1200- JSON format
    
     Required
-    Command,UID,AlmondMac,Payload
+    Command,UID,AlmondMAC,Payload
 
     Redis
-    2.hmset on AL_<AlmondMac>   (done on RM.UpdateAlmond)
-    7.hgetall on UID_<user_list> 
+    2.hmset on AL_<AlmondMAC>            (M.ALMOND + AlmondMAC)
+    7.hgetall on UID_<user_list>         (M.USER + user_list)
 
     Queue
     4.Send DynamicIndexUpdated to config.ALEXA_QUEUE
@@ -226,11 +282,11 @@ AddRule,ValidateRule,UpdateRule,RemoveRule,RemoveAllRules,UpdateClient,RemoveCli
     1200- JSON format
    
     Required
-    Command,UID,AlmondMac,Payload
+    Command,UID,AlmondMAC,Payload
 
     Redis
-    2.hmset on AL_<AlmondMac>       (done on RM.UpdateAlmond)
-    5.hgetall on UID_<user_list> 
+    2.hmset on AL_<AlmondMAC>                (M.ALMOND + AlmondMAC)
+    5.hgetall on UID_<user_list>             (M.USER + user_list)
 
     Queue
     4.Send DynamicDeviceUpdated to BACKGROUND_QUEUE
@@ -249,11 +305,11 @@ AddRule,ValidateRule,UpdateRule,RemoveRule,RemoveAllRules,UpdateClient,RemoveCli
     1300- JSON format
    
     Required
-    Command,UID,AlmondMac,Payload
+    Command,UID,AlmondMAC,Payload
 
     Redis
-    2.hmset on AL_<AlmondMac>    (done on RM.updateAlmond)
-    5.hgetall on UID_<user_list>
+    2.hmset on AL_<AlmondMAC>              (M.ALMOND + AlmondMAC)
+    5.hgetall on UID_<user_list>           (M.USER + user_list)
 
     Queue
     4.Send DynamicSceneAdded to BACKGROUND_QUEUE
@@ -271,11 +327,11 @@ AddRule,ValidateRule,UpdateRule,RemoveRule,RemoveAllRules,UpdateClient,RemoveCli
     1300- JSON format
    
     Required
-    Command,UID,AlmondMac,Payload
+    Command,UID,AlmondMAC,Payload
 
     Redis
-    2.hmset on AL_<AlmondMac>     (done on RM.updateAlmond)
-    5.hgetall on UID_<user_list>
+    2.hmset on AL_<AlmondMAC>              (M.ALMOND + AlmondMAC)
+    5.hgetall on UID_<user_list>           (M.USER + user_list)
 
     Queue
     4.Send DynamicSceneActivated to BACKGROUND_QUEUE
@@ -294,11 +350,11 @@ AddRule,ValidateRule,UpdateRule,RemoveRule,RemoveAllRules,UpdateClient,RemoveCli
     1300- JSON format
    
     Required
-    Command,UID,AlmondMac,Payload
+    Command,UID,AlmondMAC,Payload
 
     Redis
-    2.hmset on AL_<AlmondMac>   (done on RM.updateAlmond)
-    5.hgetall on UID_<user_list>
+    2.hmset on AL_<AlmondMAC>              (M.ALMOND + AlmondMAC)
+    5.hgetall on UID_<user_list>           (M.USER + user_list)
 
     Queue
     4.Send DynamicSceneUpdated to BACKGROUND_QUEUE
@@ -317,11 +373,11 @@ AddRule,ValidateRule,UpdateRule,RemoveRule,RemoveAllRules,UpdateClient,RemoveCli
     1300- JSON format
    
     Required
-    Command,UID,AlmondMac,Payload
+    Command,UID,AlmondMAC,Payload
 
     Redis
-    2.hmset on AL_<AlmondMac>     (done on RM.updateAlmond)
-    5.hgetall on UID_<user_list>
+    2.hmset on AL_<AlmondMAC>             (M.ALMOND + AlmondMAC)
+    5.hgetall on UID_<user_list>          (M.USER + user_list)
 
     Queue
     4.Send DynamicSceneRemoved to BACKGROUND_QUEUE
@@ -340,11 +396,11 @@ AddRule,ValidateRule,UpdateRule,RemoveRule,RemoveAllRules,UpdateClient,RemoveCli
     1300- JSON format
    
     Required
-    Command,UID,AlmondMac,Payload
+    Command,UID,AlmondMAC,Payload
 
     Redis
-    2.hmset on AL_<AlmondMac>       (done on RM.updateAlmond)
-    5.hgetall on UID_<user_list>
+    2.hmset on AL_<AlmondMAC>               (M.ALMOND + AlmondMAC)
+    5.hgetall on UID_<user_list>            (M.USER + user_list)
 
     Queue
     4.Send DynamicAllSceneRemoved to BACKGROUND_QUEUE
@@ -363,11 +419,11 @@ AddRule,ValidateRule,UpdateRule,RemoveRule,RemoveAllRules,UpdateClient,RemoveCli
     1400- JSON format
 
     Required
-    Command,UID,AlmondMac,Payload
+    Command,UID,AlmondMAC,Payload
 
     Redis
-    2.hmset on AL_<AlmondMac>    (done on RM.updateAlmond)
-    5.hgetall on UID_<user_list>
+    2.hmset on AL_<AlmondMAC>              (M.ALMOND + AlmondMAC)
+    5.hgetall on UID_<user_list>           (M.USER + user_list)
 
     Queue
     4.Send DynamicRuleAdded to BACKGROUND_QUEUE
@@ -386,11 +442,11 @@ AddRule,ValidateRule,UpdateRule,RemoveRule,RemoveAllRules,UpdateClient,RemoveCli
     1400- JSON format
 
     Required
-    Command,UID,AlmondMac,Payload
+    Command,UID,AlmondMAC,Payload
 
     Redis
-    2.hmset on AL_<AlmondMac>    (done on RM.updateAlmond)
-    5.hgetall on UID_<user_list>
+    2.hmset on AL_<AlmondMAC>             (M.ALMOND + AlmondMAC)
+    5.hgetall on UID_<user_list>          (M.USER + user_list)
 
     Queue
     4.Send DynamicRuleUpdated to BACKGROUND_QUEUE
@@ -409,11 +465,11 @@ AddRule,ValidateRule,UpdateRule,RemoveRule,RemoveAllRules,UpdateClient,RemoveCli
     1400- JSON format
 
     Required
-    Command,UID,AlmondMac,Payload
+    Command,UID,AlmondMAC,Payload
 
     Redis
-    2.hmset on AL_<AlmondMac>     (done on RM.updateAlmond)
-    5.hgetall on UID_<user_list>
+    2.hmset on AL_<AlmondMAC>           (M.ALMOND + AlmondMAC)
+    5.hgetall on UID_<user_list>        (M.USER + user_list)
 
     Queue
     4.Send DynamicRuleRemoved to BACKGROUND_QUEUE
@@ -432,11 +488,11 @@ AddRule,ValidateRule,UpdateRule,RemoveRule,RemoveAllRules,UpdateClient,RemoveCli
     1400- JSON format
 
     Required
-    Command,UID,AlmondMac,Payload
+    Command,UID,AlmondMAC,Payload
 
     Redis
-    2.hmset on AL_<AlmondMac>       (done on RM.updateAlmond)
-    5.hgetall on UID_<user_list>
+    2.hmset on AL_<AlmondMAC>           (M.ALMOND + AlmondMAC)
+    5.hgetall on UID_<user_list>        (M.USER + user_list)
 
     Queue
     4.Send DynamicAllRulesRemoved to BACKGROUND_QUEUE
@@ -455,11 +511,11 @@ AddRule,ValidateRule,UpdateRule,RemoveRule,RemoveAllRules,UpdateClient,RemoveCli
     1500- JSON format
 
     Required
-    Command,UID,AlmondMac,Payload
+    Command,UID,AlmondMAC,Payload
 
     Redis
-    2.hmset on AL_<AlmondMac>           (done on RM.updateAlmond)
-    5.hgetall on UID_<user_list>
+    2.hmset on AL_<AlmondMAC>           (M.ALMOND + AlmondMAC)
+    5.hgetall on UID_<user_list>        (M.USER + user_list)
 
     Queue
     4.Send DynamicClientAdded to BACKGROUND_QUEUE
@@ -478,11 +534,11 @@ AddRule,ValidateRule,UpdateRule,RemoveRule,RemoveAllRules,UpdateClient,RemoveCli
     1500- JSON format
 
     Required
-    Command,UID,AlmondMac,Payload
+    Command,UID,AlmondMAC,Payload
 
     Redis
-    2.hmset on AL_<AlmondMac>      (done on RM.updateAlmond)
-    5.hgetall on UID_<user_list>
+    2.hmset on AL_<AlmondMAC>             (M.ALMOND + AlmondMAC)
+    5.hgetall on UID_<user_list>          (M.USER + user_list)
 
     Queue
     4.Send DynamicClientUpdated to BACKGROUND_QUEUE
@@ -501,11 +557,11 @@ AddRule,ValidateRule,UpdateRule,RemoveRule,RemoveAllRules,UpdateClient,RemoveCli
     1500- JSON format
 
     Required
-    Command,UID,AlmondMac,Payload
+    Command,UID,AlmondMAC,Payload
 
     Redis
-    2.hmset on AL_<AlmondMac>        (done on RM.updateAlmond)
-    5.hgetall on UID_<user_list>
+    2.hmset on AL_<AlmondMAC>         (M.ALMOND + AlmondMAC) 
+    5.hgetall on UID_<user_list>       (M.USER + user_list)
 
     Queue
     4.Send DynamicClientRemoved to BACKGROUND_QUEUE
@@ -519,7 +575,7 @@ AddRule,ValidateRule,UpdateRule,RemoveRule,RemoveAllRules,UpdateClient,RemoveCli
     almondProtocol(packet)-> processor(do)->processor(validate)->almondUsers(execute)->processor(dispatchResponses),processor(sendToBackground)->broadcaster(sendToBackground)->processor(broadcast)->broadcaster(send)
 
 <a name="CommonToAll"></a>
-## 8.CommonToAll
+## 10.CommonToAll
 
     2. Checks if the packet.command is present, if not then return.
     3. Compares the indexOf packet.command with -1 and evaluates it with socket.almondMAC ,if not then return.
