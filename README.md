@@ -15,6 +15,16 @@ AddRule,ValidateRule,UpdateRule,RemoveRule,RemoveAllRules,UpdateClient,RemoveCli
   [DynamicRuleAdded (Command 1400)](#1400),[DynamicRuleUpdated (Command 1400)](#1400),[DynamicRuleRemoved (Command 1400)](#1400),[DynamicAllRulesRemoved (Command 1400)](#1400),
   [DyanamicClientAdded (Command 1500)](#1500),[DynamicClientUpdated (Command 1500)](#1500),[DynamicClientRemoved (Command 1500)](#1500)  
 - [CommonToAll](#CommonToAll)
+------------------------------------------------------------------------------------------------
+- [Consumer commands:](#ConsumerCommands)
+- [AffiliationAlmondComplete (Command 24)](#24)
+- [UpdateDeviceIndex,UpdateDeviceName,AddScene,ActivateScene,UpdateScene,RemoveScene,
+RemoveAllScenes,AddRule,ValidateRule,UpdateRule,RemoveRule,RemoveAllRules,UpdateClient,
+RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
+- [RouterSummary,GetWirelessSettings,SetWirelessSettings,RebootRouter,SendLogs,FirmwareUpdate,
+(Command 1110)](#1110c)
+- [AlmondNameChange (Command 62)](#62)
+- [AlmondModeChange (Command 62)](#62)
 
 <a name="1100"></a>
 ## 1.Command 1100
@@ -28,7 +38,7 @@ AddRule,ValidateRule,UpdateRule,RemoveRule,RemoveAllRules,UpdateClient,RemoveCli
     2.Get ICID_<packet.ICID>              (M.ICID + packet.ICID)
 
     Queue
-    3.send ICID to queue
+    3.send packet.ICID to queue
 
     Functional 
     1.Command 1100
@@ -48,7 +58,7 @@ AddRule,ValidateRule,UpdateRule,RemoveRule,RemoveAllRules,UpdateClient,RemoveCli
     2.Get ICID_<packet.ICID>             (M.ICID + packet.ICID)
 
     Queue
-    3.send ICID to queue
+    3.send packet.ICID to queue
 
     Functional 
     1.Command 1100
@@ -95,7 +105,7 @@ AddRule,ValidateRule,UpdateRule,RemoveRule,RemoveAllRules,UpdateClient,RemoveCli
 
     Functional
     1.Command 25
-    9.Delete affiliationStore[id]
+    9.Delete affiliationStore[data.AlmondMAC]
     10.Destroy Socket
     11.Send AffiliationAlmondCompleteResponse to Almond
 
@@ -180,11 +190,13 @@ AddRule,ValidateRule,UpdateRule,RemoveRule,RemoveAllRules,UpdateClient,RemoveCli
      Command,UID,AlmondMAC,Payload
 
      Redis
-     2.hgetall on AL_<AlmondMAC>          (M.Almond+AlmondMAC)
+     2.hgetall on AL_<AlmondMAC>          (M.ALMOND+AlmondMAC)
      5.Perform multi:
        i. hmset on UID_<UserID>          (M.USER + UserID)
        ii. hmset on AL_<pMAC>            (M.ALMOND + pMAC)
        iii. hdel on AL_<pMAC>            (M.ALMOND + pMAC)
+     
+     6.hmset on AL_<AlmondMAC>           (M.ALMOND + AlmondMAC)
 
      SQl
      3.Select on AlmondUsers
@@ -193,7 +205,7 @@ AddRule,ValidateRule,UpdateRule,RemoveRule,RemoveAllRules,UpdateClient,RemoveCli
        Parameters: AlmondMAC
 
      Functional
-     1.Command 1050
+     1.Command 1040
 
      Flow
      almondProtocol(packet)->processor(do)->processor(validate)->almondUsers(almond_hello)
@@ -207,11 +219,14 @@ AddRule,ValidateRule,UpdateRule,RemoveRule,RemoveAllRules,UpdateClient,RemoveCli
      Command,UID,AlmondMAC,Payload
 
      Redis
-     2.hgetall on AL_<AlmondMAC>          (M.Almond+AlmondMAC)
+     2.hgetall on AL_<AlmondMAC>          (M.ALMOND + AlmondMAC)
+     
      5.Perform multi:
        i. hmset on UID_<UserID>          (M.USER + UserID)
        ii. hmset on AL_<pMAC>            (M.ALMOND + pMAC)
        iii. hdel on AL_<pMAC>            (M.ALMOND + pMAC)
+    
+    6.hmset on AL_<AlmondMAC>            (ALMOND + AlmondMAC)
 
      SQl
      3.Select on AlmondUsers
@@ -220,7 +235,7 @@ AddRule,ValidateRule,UpdateRule,RemoveRule,RemoveAllRules,UpdateClient,RemoveCli
      Parameters: AlmondMAC
 
      Functional
-     1.Command 1050
+     1.Command 31
 
      Flow
      almondProtocol(packet)->processor(do)->processor(validate)->almondUsers(almond_hello)
@@ -587,4 +602,112 @@ AddRule,ValidateRule,UpdateRule,RemoveRule,RemoveAllRules,UpdateClient,RemoveCli
     11. If packet.Command is not equal to 31 then goto tracker.almond_tracking.
     13. Goes to Processor.do
     15. checks and calls the dispatchResponses function
+------------------------------------------------------------------------------------------------
+
+<a name="ConsumerCommands"></a>
+## ConsumerCommands
+<a name="24"></a>
+## 1.Command 24 (AffiliationAlmondComplete)
+    Command no
+    24- JSON format
+
+    Required
+    Command,Payload,ICID,unicastID,AlmondMAC
+
+    Redis
+    4.get on ICID_<result.unicastID>
+
+    Queue
+    5.Send result.unicastID to queue
+
+    Functional
+    1.Command 24
+    2.return socketStore[result.almondMAC]
+    3.return affiliationStore[result.almondMAC]
+    6.Append result.almondMAC to offlineMACS.txt
+
+<a name="1062"></a>
+## 2.Command 1062
+    Command no 
+    1062- JSON format
+
+    Required
+    Command,Payload,ICID,unicastID,AlmondMAC
+
+    Redis
+    4.get on ICID_<result.unicastID>
+
+    Queue
+    5.Send result.unicastID to queue
+
+    Functional
+    1.Command 1062
+    2.return socketStore[result.almondMAC]
+    3.Send result.payload to Almond
+    6.Append result.almondMAC to offlineMACS.txt
+
+<a name="1110c"></a>
+## 3.Command 1100
+    Command no 
+    1062- JSON format
+
+    Required
+    Command,Payload,ICID,unicastID,AlmondMAC
+
+    Redis
+    4.get on ICID_<result.unicastID>
+
+    Queue
+    5.Send result.unicastID to queue
+
+    Functional
+    1.Command 1110
+    2.return socketStore[result.almondMAC]
+    3.Send result.payload to Almond
+    6.Append result.almondMAC to offlineMACS.txt
+
+<a name="62"></a>
+## 4.Command 62 (AlmondNameChange)
+    Command no 
+    62- JSON format
+ 
+    Required 
+    Command,CommandType,ICID,Payload
+
+    Redis
+    3.get on ICID_<result.unicastID>
+
+    Queue
+    4.Send output.CommandType to queue
+ 
+    Functional
+    1.Command 62
+    2.return socketStore[result.almondMAC]
+    5.Append result.almondMAC to offlineMACS.txt
+
+<a name="62"></a>
+## 5.Command 62 (AlmondModeChange)
+    Command no 
+    62- JSON format
+ 
+    Required 
+    Command,CommandType,ICID,Payload
+
+    Redis
+    3.get on ICID_<result.unicastID>
+
+    Queue
+    4.Send output.CommandType to queue
+ 
+    Functional
+    1.Command 62
+    2.return socketStore[result.almondMAC]
+    5.Append result.almondMAC to offlineMACS.txt
+
+
+
+
+
+
+
 
