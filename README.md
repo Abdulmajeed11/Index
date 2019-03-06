@@ -4,16 +4,16 @@
 - [UpdateDeviceIndex,UpdateDeviceName,AddScene,ActiveScene,UpdateScene,RemoveScene,RemoveAlllScenes,
 AddRule,ValidateRule,UpdateRule,RemoveRule,RemoveAllRules,UpdateClient,RemoveClient (Command 1063)](#1063)
 - [AffiliationAlmondComplete (Command 25)](#25)
-- [AlmondModeChange (Command 63)](#63)
-- [AlmondNameChange (Command 63)](#63)
+- [AlmondModeChange (Command 63)](#63a)
+- [AlmondNameChange (Command 63)](#63b)
 - [AlmondProperties (Command 1050)](#1050)
 - [AlmondHello (Command 1040)](#1040)
 - [AlmondHello (Command 31)](#31)
 - [Dynamic commands:](#DynamicCommands)
-  - [DynamicAlmondProperties (Command 1050)](#1050),[DynamicIndexUpdated (Command 1200)](#1200),[DynamicDeviceUpdated (Command 1200)](#1200),[DynamicSceneAdded (Command 1300)](#1300),
-  [DynamicSceneActivated (Command 1300)](#1300),[DynamicSceneUpdated (Command 1300)](#1300),[DynamicSceneRemoved (Command 1300)](#1300),[DynamicAllSceneRemoved (Commnad 1300)](#1300),
-  [DynamicRuleAdded (Command 1400)](#1400),[DynamicRuleUpdated (Command 1400)](#1400),[DynamicRuleRemoved (Command 1400)](#1400),[DynamicAllRulesRemoved (Command 1400)](#1400),
-  [DyanamicClientAdded (Command 1500)](#1500),[DynamicClientUpdated (Command 1500)](#1500),[DynamicClientRemoved (Command 1500)](#1500)  
+  - [DynamicAlmondProperties (Command 1050)](#1050),[DynamicIndexUpdated (Command 1200)](#1200a),[DynamicDeviceUpdated (Command 1200)](#1200b),[DynamicSceneAdded (Command 1300)](#1300a),
+  [DynamicSceneActivated (Command 1300)](#1300b),[DynamicSceneUpdated (Command 1300)](#1300c),[DynamicSceneRemoved (Command 1300)](#1300d),[DynamicAllSceneRemoved (Commnad 1300)](#1300e),
+  [DynamicRuleAdded (Command 1400)](#1400a),[DynamicRuleUpdated (Command 1400)](#1400b),[DynamicRuleRemoved (Command 1400)](#1400c),[DynamicAllRulesRemoved (Command 1400)](#1400d),
+  [DyanamicClientAdded (Command 1500)](#1500a),[DynamicClientUpdated (Command 1500)](#1500b),[DynamicClientRemoved (Command 1500)](#1500c)  
 - [CommonToAll](#CommonToAll)
 ------------------------------------------------------------------------------------------------
 - [Consumer commands:](#ConsumerCommands)
@@ -23,8 +23,8 @@ RemoveAllScenes,AddRule,ValidateRule,UpdateRule,RemoveRule,RemoveAllRules,Update
 RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
 - [RouterSummary,GetWirelessSettings,SetWirelessSettings,RebootRouter,SendLogs,FirmwareUpdate,
 (Command 1110)](#1110c)
-- [AlmondNameChange (Command 62)](#62)
-- [AlmondModeChange (Command 62)](#62)
+- [AlmondNameChange (Command 62)](#62a)
+- [AlmondModeChange (Command 62)](#62b)
 
 <a name="1100"></a>
 ## 1.Command 1100
@@ -113,7 +113,7 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     Flow
     almondProtocol(packet)-> processor(do)->processor(validate)->almondUsers(affiliation_almond_complete),almondUsers(verify_affiliation_complete)-> processor(dispatchResponses),processor(unicast)->broadcaster(unicast)->processor(broadcaster)->broadcaster(send)
       
-<a name="63"></a>
+<a name="63a"></a>
 ## 4.Command 63 (AlmondModeChange)
     Command no
     63- JSON format
@@ -136,7 +136,7 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     almondProtocol(packet)-> processor(do)->processor(validate)->almondUsers(dummyModel)->processor(dispatchResponses),processor(unicast)->broadcaster(unicast)
     
  
-<a name="63"></a>
+<a name="63b"></a>
 ## 5.Command 63 (AlmondNameChange)
     Command no
     63- JSON format
@@ -266,7 +266,7 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     almondProtocol(packet)->processor(do)->processor(validate)->almondUsers(properties)->processor(dispatchResponses),processor(sendToBackground)->broadcaster(sendToBackground)
 
 
-<a name="1200"></a>
+<a name="1200a"></a>
 ## b)Command 1200 (DynamicIndexUpdated)
     Command no
     1200- JSON format
@@ -291,7 +291,7 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     Flow
     almondProtocol(packet)-> processor(do)->processor(validate)->almondUsers(execute)->processor(dispatchResponses),processor(sendToBackground)->broadcaster(sendToBackground)->processor(broadcast)->broadcaster(send)
 
-<a name="1200"></a>
+<a name="1200b"></a>
 ## c)Command 1200 (DynamicDeviceUpdated)
     Command no
     1200- JSON format
@@ -314,7 +314,7 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     Flow
     almondProtocol(packet)-> processor(do)->processor(validate)->almondUsers(execute)->processor(dispatchResponses),processor(sendToBackground)->broadcaster(sendToBackground)->processor(broadcast)->broadcaster(send)
 
-<a name="1300"></a>
+<a name="1300a"></a>
 ## d)Command 1300 (DynamicSceneAdded)
     Command no
     1300- JSON format
@@ -336,7 +336,7 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     Flow
     almondProtocol(packet)-> processor(do)->processor(validate)->almondUsers(execute)->processor(dispatchResponses),processor(sendToBackground)->broadcaster(sendToBackground)->processor(broadcast)->broadcaster(send)
 
-<a name="1300"></a>
+<a name="1300b"></a>
 ## e)Command 1300 (DynamicSceneActivated)
     Command no
     1300- JSON format
@@ -359,7 +359,7 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     Flow
     almondProtocol(packet)-> processor(do)->processor(validate)->almondUsers(execute)->processor(dispatchResponses),processor(sendToBackground)->broadcaster(sendToBackground)->processor(broadcast)->broadcaster(send)
 
-<a name="1300"></a>
+<a name="1300c"></a>
 ## f)Command 1300 (DynamicSceneUpdated)
     Command no
     1300- JSON format
@@ -382,7 +382,7 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     Flow
     almondProtocol(packet)->processor(do)->processor(validate)->almondUsers(execute)->processor(dispatchResponses),processor(sendToBackground)->broadcaster(sendToBackground)->processor(broadcast)->broadcaster(send)
 
-<a name="1300"></a>
+<a name="1300d"></a>
 ## g)Command 1300 (DynamicSceneRemoved)
     Command no
     1300- JSON format
@@ -405,7 +405,7 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     Flow
     almondProtocol(packet)->processor(do)->processor(validate)->almondUsers(execute)->processor(dispatchResponses),processor(sendToBackground)->broadcaster(sendToBackground)->processor(broadcast)->broadcaster(send)
 
-<a name="1300"></a>
+<a name="1300e"></a>
 ## h)Command 1300 (DynamicAllSceneRemoved)
     Command no
     1300- JSON format
@@ -428,7 +428,7 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     Flow
     almondProtocol(packet)->processor(do)->processor(validate)->almondUsers(execute)->processor(dispatchResponses),processor(sendToBackground)->broadcaster(sendToBackground)->processor(broadcast)->broadcaster(send)
 
-<a name="1400"></a>
+<a name="1400a"></a>
 ## i)Command 1400 (DynamicRuleAdded)
     Command no
     1400- JSON format
@@ -451,7 +451,7 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     Flow
     almondProtocol(packet)->processor(do)->processor(validate)->almondUsers(execute)->processor(dispatchResponses),processor(sendToBackground)->broadcaster(sendToBackground)->processor(broadcast)->broadcaster(send)
 
-<a name="1400"></a>
+<a name="1400b"></a>
 ## j)Command 1400 (DynamicRuleUpdated)
     Command no
     1400- JSON format
@@ -474,7 +474,7 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     Flow
     almondProtocol(packet)->processor(do)->processor(validate)->almondUsers(execute)->processor(dispatchResponses),processor(sendToBackground)->broadcaster(sendToBackground)->processor(broadcast)->broadcaster(send)
 
-<a name="1400"></a>
+<a name="1400c"></a>
 ## k)Command 1400 (DynamicRuleRemoved)
     Command no
     1400- JSON format
@@ -497,7 +497,7 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     Flow
     almondProtocol(packet)->processor(do)->processor(validate)->almondUsers(execute)->processor(dispatchResponses),processor(sendToBackground)->broadcaster(sendToBackground)->processor(broadcast)->broadcaster(send)
 
-<a name="1400"></a>
+<a name="1400d"></a>
 ## l)Command 1400 (DynamicAllRulesRemoved)
     Command no
     1400- JSON format
@@ -520,7 +520,7 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     Flow
     almondProtocol(packet)->processor(do)->processor(validate)->almondUsers(execute)->processor(dispatchResponses),processor(sendToBackground)->broadcaster(sendToBackground)->processor(broadcast)->broadcaster(send)
 
-<a name="1500"></a>
+<a name="1500a"></a>
 ## m)Command 1500 (DynamicClientAdded)
     Command no
     1500- JSON format
@@ -543,7 +543,7 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     Flow
     almondProtocol(packet)->processor(do)->processor(validate)->almondUsers(execute)->processor(dispatchResponses),processor(sendToBackground)->broadcaster(sendToBackground)->processor(broadcast)->broadcaster(send)
 
-<a name="1500"></a>
+<a name="1500b"></a>
 ## n)Command 1500 (DynamicClientUpdated)
     Command no
     1500- JSON format
@@ -566,7 +566,7 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     Flow
     almondProtocol(packet)-> processor(do)->processor(validate)->almondUsers(execute)->processor(dispatchResponses),processor(sendToBackground)->broadcaster(sendToBackground)->processor(broadcast)->broadcaster(send)
 
-<a name="1500"></a>
+<a name="1500c"></a>
 ## o)Command 1500 (DynamicClientRemoved)
     Command no
     1500- JSON format
@@ -666,7 +666,7 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     3.Send result.payload to Almond
     6.Append result.almondMAC to offlineMACS.txt
 
-<a name="62"></a>
+<a name="62a"></a>
 ## 4.Command 62 (AlmondNameChange)
     Command no 
     62- JSON format
@@ -685,7 +685,7 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     2.return socketStore[result.almondMAC]
     5.Append result.almondMAC to offlineMACS.txt
 
-<a name="62"></a>
+<a name="62b"></a>
 ## 5.Command 62 (AlmondModeChange)
     Command no 
     62- JSON format
