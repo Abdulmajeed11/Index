@@ -29,7 +29,7 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
 - [CommandType alexaLinking](#alexaLinking)
 - [CommandType alexaUnLinking](#alexaUnLinking)
 - [ChangeCMSCode (Command 9999)](#9999)
-- [Updateclient](#UpdateClient)
+- [UpdateClient](#UpdateClient)
 - [Id 269](#269)
 - [Type removeAll](#removeAll)
 ------------------------------------------------------------------------------------------------
