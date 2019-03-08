@@ -32,6 +32,8 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
 - [UpdateClient](#UpdateClient)
 - [Id 269](#269)
 - [Type removeAll](#removeAll)
+- [Reset (Command 1030)](#1030)
+- [Command 2020](#2020)
 ------------------------------------------------------------------------------------------------
 
 <a name="1100"></a>
@@ -654,7 +656,7 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     Command,Payload,ICID,unicastID,AlmondMAC
 
     Redis
-    4.get on ICID_<result.unicastID>
+    4.get on ICID_<result.unicastID>     //key= (M.ICID + result.unicastID),value= null
 
     Queue
     5.Send result.unicastID to queue
@@ -674,7 +676,7 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     Command,Payload,ICID,unicastID,AlmondMAC
 
     Redis
-    4.get on ICID_<result.unicastID>
+    4.get on ICID_<result.unicastID>         //key= (M.ICID + result.unicastID),value= null
 
     Queue
     5.Send result.unicastID to queue
@@ -694,7 +696,7 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     Command,Payload,ICID,unicastID,AlmondMAC
 
     Redis
-    4.get on ICID_<result.unicastID>
+    4.get on ICID_<result.unicastID>        //key= (M.ICID + result.unicastID),value= null
 
     Queue
     5.Send result.unicastID to queue
@@ -714,7 +716,7 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     Command,CommandType,ICID,Payload
 
     Redis
-    3.get on ICID_<result.unicastID>
+    3.get on ICID_<result.unicastID>           //key= (M.ICID + result.unicastID),value= null
 
     Queue
     4.Send output.CommandType to queue
@@ -733,7 +735,7 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     Command,CommandType,ICID,Payload
 
     Redis
-    3.get on ICID_<result.unicastID>
+    3.get on ICID_<result.unicastID>            //key= (M.ICID + result.unicastID),value= null
 
     Queue
     4.Send output.CommandType to queue
@@ -752,7 +754,7 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     Command,Payload,ICID,unicastID,AlmondMAC
 
     Redis
-    4.get on ICID_<result.unicastID>
+    4.get on ICID_<result.unicastID>            //key= (M.ICID + result.unicastID),value= null
 
     Queue
     5.Send result.unicastID to queue
@@ -773,7 +775,7 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
 
     Redis
     3.hmset on AL_<payload.almondMAC>
-    7.get on ICID_<result.unicastID>
+    7.get on ICID_<result.unicastID>            //key= (M.ICID + result.unicastID),value= null
 
     Queue
     5.Send alexaLinking to BACKGROUND_QUEUE
@@ -796,7 +798,7 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     
     Redis
     3.hdel on AL_<payload.almondMAC>
-    7.get on ICID_<result.unicastID>
+    7.get on ICID_<result.unicastID>           //key= (M.ICID + result.unicastID),value= null
 
     Queue
     8.Send result.unicastID to queue
@@ -818,7 +820,7 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     Command,Payload,ICID,unicastID,AlmondMAC
 
     Redis
-    3.get on ICID_<result.unicastID>
+    3.get on ICID_<result.unicastID>              //key= (M.ICID + result.unicastID),value= null
 
     Queue
     4.Send result.unicastID to queue
@@ -837,7 +839,7 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     Command,Payload,ICID,unicastID,AlmondMAC
 
     Redis
-    4.get on ICID_<result.unicastID>
+    4.get on ICID_<result.unicastID>             //key= (M.ICID + result.unicastID),value= null
 
     Queue
     5.Send result.unicastID to queue
@@ -899,3 +901,32 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     2.return socketStore[result.almondMAC]
     3.destroySocket(socketStore[result.almondMAC])
     4.delete socketStore[socket.almondMAC]
+
+<a name="1030"></a>
+## 12) Command 1030 (Reset)
+    Command 
+    1030- JSON format 
+    
+    Required 
+    Command,CommandType,almondMAC
+
+    Functional
+    1.Command 1030
+
+    if (ZEN.MACS.indexOf(parseInt(mac)) >= 0) 
+    2. return almondMAC
+
+<a name="2020"></a>
+## 13) ID 2020
+    Command 
+    2020- JSON format 
+    
+    Required 
+    Command,CommandType,almondMAC
+ 
+    Queue
+    3.Send json to result.queue
+    
+    Functional
+    1.Command 2020
+    2.return json(AlmondMAC,Server,Status,LastEpoch)
