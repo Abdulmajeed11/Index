@@ -18,6 +18,7 @@ AddRule,ValidateRule,UpdateRule,RemoveRule,RemoveAllRules,UpdateClient,RemoveCli
 - [AffiliationAlmondRequest (Command 21)](#21)
 - [KeepAlive (Command 104)](#104)
 - [AlmondReset (Command 1030)](#1030)
+
 ------------------------------------------------------------------------------------------------
 - [Consumer commands:](#ConsumerCommands)
 - [AffiliationAlmondComplete (Command 24)](#24)
@@ -930,7 +931,7 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     4.Send Response to queue
 
     Functional
-    1.CommandType alexaUnLinking 
+    1.CommandType UpdateClient 
     2.Send Res,CommandLengthType to Almond
     5.Append result.almondMAC to offlineMACS.txt
 
