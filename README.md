@@ -26,7 +26,7 @@ AddRule,ValidateRule,UpdateRule,RemoveRule,RemoveAllRules,UpdateClient,RemoveCli
 RemoveAllScenes,AddRule,ValidateRule,UpdateRule,RemoveRule,RemoveAllRules,UpdateClient,
 RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
 - [RouterSummary,GetWirelessSettings,SetWirelessSettings,RebootRouter,SendLogs,FirmwareUpdate,
-(Command 1110)](#1110c)
+(Command 1100)](#1100c)
 - [AlmondNameChange (Command 62)](#62a)
 - [AlmondModeChange (Command 62)](#62b)
 - [Command 1020](#1020)
@@ -783,7 +783,7 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     2.Send Res,CommandLengthType to Almond
     5.Append result.almondMAC to offlineMACS.txt
 
-<a name="1110c"></a>
+<a name="1100c"></a>
 ## 3) Command 1100
     Command no 
     1110- JSON format
@@ -798,7 +798,7 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     4.Send Response to queue
 
     Functional
-    1.Command 1110
+    1.Command 1100
     2.Send Res,CommandLengthType to Almond
     5.Append result.almondMAC to offlineMACS.txt
 
@@ -1006,7 +1006,5 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     
     Functional
     1.Command 2020
-
-
 
 
