@@ -124,7 +124,7 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
 
     Queue
     13.Send packet.ICID to queue 
-    15.Send Response to All Queues returned in Step 4
+    15.Send Response to All Queues returned in Step 14
 
     Functional
     1.Command 25
