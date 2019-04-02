@@ -72,7 +72,7 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     2.Get ICID_<packet.ICID>             // value = null
 
     Queue
-    3.send Response to queue
+    3.send Response to queue from step 2
 
     Functional 
     1.Command 1063
@@ -123,7 +123,7 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     14.hgetall on UID_<user_list>    // Returns all the queues for users in user_list
 
     Queue
-    13.Send packet.ICID to queue 
+    13.Send Response to queue from step 12 
     15.Send Response to All Queues returned in Step 14
 
     Functional
@@ -147,7 +147,7 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     4.hgetall on UID_<user_list>          // Returns all the queues for users in user_list
 
     Queue
-    3.Send packet.ICID to queue
+    3.Send Respose to queue from step 2
     5.Send Response to All Queues returned in Step 4
 
     Functional
@@ -169,7 +169,7 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     4.hgetall on UID_<user_list>          // Returns all the queues for users in user_list
 
     Queue
-    3.Send packet.ICID to queue
+    3.Send Response to queue from step 2
     5.Send Response to All Queues returned in Step 4
 
     Functional
@@ -1006,5 +1006,7 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     
     Functional
     1.Command 2020
+
+
 
 
