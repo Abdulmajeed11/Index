@@ -13,7 +13,12 @@ AddRule,ValidateRule,UpdateRule,RemoveRule,RemoveAllRules,UpdateClient,RemoveCli
   - [DynamicAlmondProperties (Command 1050)](#1050),[DynamicIndexUpdated (Command 1200)](#1200a),[DynamicDeviceUpdated (Command 1200)](#1200b),[DynamicSceneAdded (Command 1300)](#1300a),
   [DynamicSceneActivated (Command 1300)](#1300b),[DynamicSceneUpdated (Command 1300)](#1300c),[DynamicSceneRemoved (Command 1300)](#1300d),[DynamicAllSceneRemoved (Commnad 1300)](#1300e),
   [DynamicRuleAdded (Command 1400)](#1400a),[DynamicRuleUpdated (Command 1400)](#1400b),[DynamicRuleRemoved (Command 1400)](#1400c),[DynamicAllRulesRemoved (Command 1400)](#1400d),
-  [DyanamicClientAdded (Command 1500)](#1500a),[DynamicClientUpdated (Command 1500)](#1500b),[DynamicClientRemoved (Command 1500)](#1500c),[DynamicAlmondNameChange (Command 49)](#49),[DynamicAlmondModeChange (Command 153)](#153) 
+  [DyanamicClientAdded (Command 1500)](#1500a),[DynamicClientUpdated (Command 1500)](#1500b),[DynamicClientRemoved (Command 1500)](#1500c),
+  [DynamicAlmondNameChange (Command 49)](#49),[DynamicAlmondModeChange (Command 153)](#153),
+  [DynamicDeviceList (Command 1200)](#1200c),[DynamicDeviceAdded (Command 1200)](#1200d),
+  [DynamicAllDevicesRemoved (Command 1200)](#1200e),
+  [DynamicClientList (Command 1500)](#1500d),[DynamicAllClientsRemoved (Command 1500)](#1500e),
+  [DynamicClientJoined (Command 1500)](#1500f),[DynamicClientLeft (Command 1500)](#1500g) 
 - [CloudReset (Command 8)](#8)
 - [AffiliationAlmondRequest (Command 21)](#21)
 - [KeepAlive (Command 104)](#104)
@@ -52,7 +57,7 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     2.Get ICID_<packet.ICID>              //  value = null
 
     Queue
-    3.send Response to queue
+    3.send Response to queue from step 2
 
     Functional 
     1.Command 1100
@@ -652,6 +657,167 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
 
     Flow
     almondProtocol(packet)-> processor(do)->processor(validate)->almondUsers(almondmode_change)->processor(dispatchResponses),processor(sendToBackground)->broadcaster(sendToBackground)->processor(broadcast)->broadcaster(send)
+
+<a name="1200c"></a>
+## r) DynamicDeviceList (Command 1200)
+    Command no
+    1200- JSON format
+
+    Required
+    Command,UID,CommandType,Payload
+
+    Redis   
+    2.hmset on AL_<AlmondMAC>          //value = [mapper.hashColumn, payload.HashNow]
+    5.hgetall on UID_<user_list>        // Returns all the queues for users in user_list
+
+    Queue
+    4.Send DynamicDeviceList to BACKGROUND_QUEUE
+    6.Send Response to All Queues returned in Step 5
+
+    Functional
+    1.Command 1200
+    3.Send DynamicDeviceListResponse to Almond
+
+    Flow
+    almondProtocol(packet)-> processor(do)->processor(validate)->almondUsers(execute)->processor(dispatchResponses),processor(sendToBackground)->broadcaster(sendToBackground)->processor(broadcast)->broadcaster(send)
+
+<a name="1200d"></a>
+## s) DynamicDeviceAdded (Command 1200)
+    Command no
+    1200- JSON format
+
+    Required
+    Command,UID,CommandType,Payload
+
+    Redis   
+    2.hmset on AL_<AlmondMAC>          //value = [mapper.hashColumn, payload.HashNow]
+    5.hgetall on UID_<user_list>        // Returns all the queues for users in user_list
+
+    Queue
+    4.Send DynamicDevieAdded to BACKGROUND_QUEUE
+    6.Send Response to All Queues returned in Step 5
+
+    Functional
+    1.Command 1200
+    3.Send DynamicDeviceAddedResponse to Almond
+
+    Flow
+    almondProtocol(packet)-> processor(do)->processor(validate)->almondUsers(execute)->processor(dispatchResponses),processor(sendToBackground)->broadcaster(sendToBackground)->processor(broadcast)->broadcaster(send)
+
+<a name="1200e"></a>
+## t) DynamicAllDevicesRemoved (Command 1200)
+    Command no
+    1200- JSON format
+
+    Required
+    Command,UID,CommandType,Payload
+
+    Redis   
+    2.hmset on AL_<AlmondMAC>          //value = [mapper.hashColumn, payload.HashNow]
+    5.hgetall on UID_<user_list>        // Returns all the queues for users in user_list
+
+    Queue
+    4.Send DynamicAllDevicesRemoved to BACKGROUND_QUEUE
+    6.Send Response to All Queues returned in Step 5
+
+    Functional
+    1.Command 1200
+    3.Send DynamicAllDevicesRemovedResponse to Almond
+
+    Flow
+    almondProtocol(packet)-> processor(do)->processor(validate)->almondUsers(execute)->processor(dispatchResponses),processor(sendToBackground)->broadcaster(sendToBackground)->processor(broadcast)->broadcaster(send)
+
+<a name="1500d"></a>
+## u) DynamicClientList (Command 1500)
+    Command no
+    1500- JSON format
+
+    Required
+    Command,UID,CommandType,Payload
+
+    Redis    
+    2.hmset on AL_<AlmondMAC>           // value = [mapper.hashColumn, payload.HashNow]
+    5.hgetall on UID_<user_list>        // Returns all the queues for users in user_list
+
+    Queue
+    4.Send DynamicClientList to BACKGROUND_QUEUE
+    6.Send Response to All Queues returned in Step 5
+
+    Functional
+    1.Command 1500
+    3.Send DynamicClientListResponse to Almond
+
+    Flow
+    almondProtocol(packet)->processor(do)->processor(validate)->almondUsers(execute)->processor(dispatchResponses),processor(sendToBackground)->broadcaster(sendToBackground)->processor(broadcast)->broadcaster(send)
+
+<a name="1500e"></a>
+## v) DynamicAllClientsRemoved (Command 1500)
+    Command no
+    1500- JSON format
+
+    Required
+    Command,UID,CommandType,Payload
+
+    Redis    
+    2.hmset on AL_<AlmondMAC>           // value = [mapper.hashColumn, payload.HashNow]
+    5.hgetall on UID_<user_list>        // Returns all the queues for users in user_list
+
+    Queue
+    4.Send DynamicAllClientRemoved to BACKGROUND_QUEUE
+    6.Send Response to All Queues returned in Step 5
+
+    Functional
+    1.Command 1500
+    3.Send DynamicAllClientsRemovedResponse to Almond
+
+    Flow
+    almondProtocol(packet)->processor(do)->processor(validate)->almondUsers(execute)->processor(dispatchResponses),processor(sendToBackground)->broadcaster(sendToBackground)->processor(broadcast)->broadcaster(send)
+
+<a name="1500f"></a>
+## w) DynamicClientJoined (Command 1500)
+    Command no
+    1500- JSON format
+
+    Required
+    Command,UID,CommandType,Payload
+
+    Redis    
+    2.hmset on AL_<AlmondMAC>           // value = [mapper.hashColumn, payload.HashNow]
+    5.hgetall on UID_<user_list>        // Returns all the queues for users in user_list
+
+    Queue
+    4.Send DynamicClientJoined to BACKGROUND_QUEUE
+    6.Send Response to All Queues returned in Step 5
+
+    Functional
+    1.Command 1500
+    3.Send DynamicClientJoinedResponse to Almond
+
+    Flow
+    almondProtocol(packet)->processor(do)->processor(validate)->almondUsers(execute)->processor(dispatchResponses),processor(sendToBackground)->broadcaster(sendToBackground)->processor(broadcast)->broadcaster(send)
+
+<a name="1500g"></a>
+## x) DynamicClientLeft (Command 1500)
+    Command no
+    1500- JSON format
+
+    Required
+    Command,UID,CommandType,Payload
+
+    Redis    
+    2.hmset on AL_<AlmondMAC>           // value = [mapper.hashColumn, payload.HashNow]
+    5.hgetall on UID_<user_list>        // Returns all the queues for users in user_list
+
+    Queue
+    4.Send DynamicClientLeft to BACKGROUND_QUEUE
+    6.Send Response to All Queues returned in Step 5
+
+    Functional
+    1.Command 1500
+    3.Send DynamicAllLeftResponse to Almond
+
+    Flow
+    almondProtocol(packet)->processor(do)->processor(validate)->almondUsers(execute)->processor(dispatchResponses),processor(sendToBackground)->broadcaster(sendToBackground)->processor(broadcast)->broadcaster(send)
 
 <a name="8"></a>
 ## 10) CloudReset (Command 8)
