@@ -16,7 +16,7 @@ AddRule,ValidateRule,UpdateRule,RemoveRule,RemoveAllRules,UpdateClient,RemoveCli
   [DyanamicClientAdded (Command 1500)](#1500a),[DynamicClientUpdated (Command 1500)](#1500b),[DynamicClientRemoved (Command 1500)](#1500c),
   [DynamicAlmondNameChange (Command 49)](#49),[DynamicAlmondModeChange (Command 153)](#153),
   [DynamicDeviceList (Command 1200)](#1200c),[DynamicDeviceAdded (Command 1200)](#1200d),
-  [DynamicAllDevicesRemoved (Command 1200)](#1200e),][DynamicDeviceRemoved (Command 1200)](#1200f)
+  [DynamicAllDevicesRemoved (Command 1200)](#1200e),[DynamicDeviceRemoved (Command 1200)](#1200f)
   [DynamicClientList (Command 1500)](#1500d),[DynamicAllClientsRemoved (Command 1500)](#1500e),
   [DynamicClientJoined (Command 1500)](#1500f),[DynamicClientLeft (Command 1500)](#1500g) 
 - [CloudReset (Command 8)](#8)
@@ -893,7 +893,7 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     almondProtocol(packet)-> processor(do)->processor(validate)->almondUsers(affiliation_almond)->affiliate-almond(affiliate_almond)->processor(dispatchResponses)
 
 <a name="104"></a>
-## 11) KeepAlive (Command 104)
+## 12) KeepAlive (Command 104)
     Command no
     104- JSON format
 
@@ -916,7 +916,7 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     almondProtocol(packet)-> processor(do)->processor(validate)->almondStore(keepAlive)
 
 <a name="1030"></a>
-## 12) AlmondReset (Command 1030)
+## 13) AlmondReset (Command 1030)
     Command no
     1030- JSON format
 
