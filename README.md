@@ -32,8 +32,7 @@ RemoveAllScenes,AddRule,ValidateRule,UpdateRule,RemoveRule,RemoveAllRules,Update
 RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
 - [RouterSummary,GetWirelessSettings,SetWirelessSettings,RebootRouter,SendLogs,FirmwareUpdate,
 (Command 1100)](#1100c)
-- [AlmondNameChange (Command 62)](#62a)
-- [AlmondModeChange (Command 62)](#62b)
+- [AlmondNameChange,AlmondModeChange (Command 62)](#62)
 - [Command 1020](#1020)
 - [CommandType alexaLinking](#alexaLinking)
 - [CommandType alexaUnLinking](#alexaUnLinking)
@@ -43,6 +42,14 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
 - [Type removeAll](#removeAll)
 - [Reset (Command 1030)](#1030)
 - [Command 2020](#2020)
+- [Command 1110](#1110)
+- [Command 1060](#1060)
+- [Command 1700](#1700)
+- [Command 1525](#1525)
+- [Command 300](#300)
+- [Command 4](#4)
+- [Command 1026](#1026)
+
 ------------------------------------------------------------------------------------------------
 
 <a name="1100"></a>
@@ -88,7 +95,7 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
 <a name="25"></a>
 ## 3) AffiliationAlmondComplete (Command 25)
     Command no
-    25- JSON format
+    25- XML format
 
     Required
     Command,ICID,Payload,AlmondMAC,CommandType
@@ -142,7 +149,7 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
 <a name="63a"></a>
 ## 4) AlmondModeChange (Command 63)
     Command no
-    63- JSON format
+    63- XML format
    
     Required
     Command,ICID,UID,Payload
@@ -164,7 +171,7 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
 <a name="63b"></a>
 ## 5) AlmondNameChange (Command 63)
     Command no
-    63- JSON format
+    63- XML format
    
     Required
     Command,ICID,UID,Payload
@@ -237,7 +244,7 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
 <a name="31"></a>
 ## 8) AlmondHello (Command 31)
      Command no
-     31- JSON format
+     31- XML format
 
      Required
      Command,UID,AlmondMAC,PayloadCommandType
@@ -617,7 +624,7 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
 <a name="49"></a>
 ## p) DynamicAlmondNameChange (Command 49)
     Command no
-    49- JSON format
+    49- XML format
 
     Required
     Command,UID,CommandType,Payload
@@ -639,7 +646,7 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
 <a name="153"></a>
 ## q) DynamicAlmondModeChange (Command 153)
     Command no
-    153- JSON format
+    153- XML format
 
     Required
     Command,UID,CommandType,Payload
@@ -845,7 +852,7 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
 <a name="8"></a>
 ## 10) CloudReset (Command 8)
     Command no
-    8- JSON format
+    8- XML format
 
     Required
     Command,CommandType,Payload
@@ -867,7 +874,7 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
 <a name="21"></a>
 ## 11) AffiliationAlmondRequest (Command 21)
     Command no
-    21- JSON format
+    21- XML format
 
     Required
     Command,CommandType,Payload,ALmondMAC
@@ -895,7 +902,7 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
 <a name="104"></a>
 ## 12) KeepAlive (Command 104)
     Command no
-    104- JSON format
+    104- XML format
 
     Required
     Command,CommandType,Payload,AlmondMAC
@@ -937,21 +944,14 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
 <a name="24"></a>
 ## 1) AffiliationAlmondComplete (Command 24)
     Command no
-    24- JSON format
+    26- XML format
 
     Required
     Command,Payload,ICID,unicastID,AlmondMAC
 
-    Redis
-    3.get on ICID_<result.unicastID>    
-
-    Queue
-    4.Send Response to queue
-
     Functional
-    1.Command 24
+    1.Command 26
     2.Send Res,CommandLengthType to Almond
-    5.Append result.almondMAC to offlineMACS.txt
 
 <a name="1062"></a>
 ## 2) Command 1062
@@ -961,16 +961,9 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     Required
     Command,Payload,ICID,unicastID,AlmondMAC
 
-    Redis
-    3.get on ICID_<result.unicastID>        
-
-    Queue
-    4.Send Response to queue
-
     Functional
     1.Command 1062
     2.Send Res,CommandLengthType to Almond
-    5.Append result.almondMAC to offlineMACS.txt
 
 <a name="1100c"></a>
 ## 3) Command 1100
@@ -981,44 +974,25 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     Command,Payload,ICID,unicastID,AlmondMAC
 
     Redis
-    3.get on ICID_<result.unicastID>        
-
-    Queue
-    4.Send Response to queue
-
-    Functional
-    1.Command 1100
-    2.Send Res,CommandLengthType to Almond
-    5.Append result.almondMAC to offlineMACS.txt
-
-<a name="62a"></a>
-## 4) AlmondNameChange (Command 62)
-    Command no 
-    62- JSON format
- 
-    Required 
-    Command,CommandType,ICID,Payload
-
-    Redis
-    2.get on ICID_<result.unicastID>          
+    2.get on ICID_<unicastID>        
 
     Queue
     3.Send Response to queue
- 
+
     Functional
-    1.Command 62
+    1.Command 1100
     4.Append result.almondMAC to offlineMACS.txt
 
-<a name="62b"></a>
-## 5) AlmondModeChange (Command 62)
+<a name="62"></a>
+## 4) AlmondNameChange,AlmondModeChange (Command 62)
     Command no 
-    62- JSON format
+    62- XML format
  
     Required 
     Command,CommandType,ICID,Payload
 
     Redis
-    2.get on ICID_<result.unicastID>           
+    2.get on ICID_<unicastID>          
 
     Queue
     3.Send Response to queue
@@ -1028,25 +1002,19 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     4.Append result.almondMAC to offlineMACS.txt
 
 <a name="1020"></a>
-## 6) AffiliationAlmondComplete(Command 1020)
+## 5) AffiliationAlmondComplete (Command 1020)
     Command no
     1020- JSON format
 
     Required
-    Command,Payload,ICID,unicastID,AlmondMAC
-
-    Redis
-    2.get on ICID_<result.unicastID>          
-
-    Queue
-    3.Send Response to queue
+    Command,Payload,ICID,unicastID,AlmondMAC          
 
     Functional
     1.Command 1020
-    4.Append result.almondMAC to offlineMACS.txt
+    2.Send Res,CommandLengthType to Almond
 
 <a name="alexaLinking"></a>
-## 7) CommandType alexaLinking (Command 1200)
+## 6) CommandType alexaLinking (Command 1200)
     Command no & CommandType
     1200- JSON format,alexaLinking
 
@@ -1054,20 +1022,17 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     CommandType,Payload,ICID,unicastID,AlmondMAC
 
     Redis
-    2.hmset on AL_<payload.almondMAC>
-    5.get on ICID_<result.unicastID>            
+    2.hmset on AL_<almondMAC>                // values = [alexa, true]           
 
     Queue
     3.Send alexaLinking to BACKGROUND_QUEUE
-    6.Send Response to queue
 
     Functional
     1.CommandType alexaLinking
     4.Send Res,CommandLengthType to Almond
-    7.Append result.almondMAC to offlineMACS.txt
 
 <a name="alexaUnLinking"></a>
-## 8) CommandType alexaUnLinking (Command 1200)
+## 7) CommandType alexaUnLinking (Command 1200)
     CommandType
     alexaUnLinking - xml 
 
@@ -1075,57 +1040,39 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     CommandType,Payload,ICID,unicastID,AlmondMAC
     
     Redis
-    2.hdel on AL_<payload.almondMAC>
-    5.get on ICID_<result.unicastID>           
-
-    Queue
-    6.Send Response to queue
+    2.hdel on AL_<payload.almondMAC>        // values = [alexa]
 
     Functional
     1.CommandType alexaUnLinking
     3.delete socket.alexa
     4.Send Res,CommandLengthType to Almond
-    7.Append result.almondMAC to offlineMACS.txt
 
 <a name="9999"></a>
-## 9) Command 9999 (ChangeCMSCode)
+## 8) Command 9999 (ChangeCMSCode)
     Command no
     9999- JSON format
 
     Required
-    Command,Payload,ICID,unicastID,AlmondMAC
-
-    Redis
-    2.get on ICID_<result.unicastID>              
-
-    Queue
-    3.Send Response to queue
+    Command,Payload,ICID,unicastID,AlmondMAC             
 
     Functional
     1.Command 9999
-    4.Append result.almondMAC to offlineMACS.txt
-
+    2.Send Res,CommandLengthType to Almond
+    
 <a name="UpdateClient"></a>
-## 10) CommandType UpdateClient
+## 9) CommandType UpdateClient
     CommandType 
     UpdateClient - xml
    
     Required
     Command,Payload,ICID,unicastID,AlmondMAC
 
-    Redis
-    3.get on ICID_<result.unicastID>             
-
-    Queue
-    4.Send Response to queue
-
     Functional
     1.CommandType UpdateClient 
     2.Send Res,CommandLengthType to Almond
-    5.Append result.almondMAC to offlineMACS.txt
 
 <a name="269"></a>
-## 11) Id  269
+## 10) Id  269
     Command no 
     269- JSON format
  
@@ -1147,7 +1094,7 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     2.delete socketStore[socket.almondMAC]
 
 <a name="removeAll"></a>
-## 12) Type removeAll
+## 11) Type removeAll
     Type 
     removeAll - xml
 
@@ -1157,19 +1104,19 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     Redis
     // if(nodelay)
 
-    5.hgetall on AL_<AlmondMAC>    
-    6.hmset on AL_<AlmondMAC>  
+    3.hgetall on AL_<AlmondMAC>    
+    4.hmset on AL_<AlmondMAC>  
     //values = [status,0,offline,Date,server,config.Connections.RabbitMQ.Queue]
 
     Queue
-    7.Send AlmondStatus to config.BACKGROUND_QUEUE
+    5.Send AlmondStatus to config.BACKGROUND_QUEUE
 
     Functional
     1.Type removeAll
-    4.delete socketStore[socket.almondMAC]
+    2.delete socketStore[socket.almondMAC]
 
 <a name="1030"></a>
-## 13) Command 1030 (reset)
+## 12) Command 1030 (reset)
     Command 
     1030- JSON format 
     
@@ -1183,7 +1130,7 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     2. return almondMAC
 
 <a name="2020"></a>
-## 14) ID 2020
+## 13) ID 2020
     Command 
     2020- JSON format 
     
@@ -1191,11 +1138,91 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     Command,CommandType,almondMAC
  
     Queue
-    2.Send Response to result.queue
+    2.Send Response to config.Connections.RabbitMQ.Queue
     
     Functional
     1.Command 2020
 
+<a name="1110"></a>
+## 14) Command 1110
+    Command 
+    1110- JSON format 
+    
+    Required 
+    Command,CommandType,almondMAC
 
+    Functional
+    1.Command 1110
+    2.Send Res,CommandLengthType to Almond
 
+<a name="1060"></a>
+## 15) Command 1060
+    Command 
+    1060- JSON format 
+    
+    Required 
+    Command,CommandType,almondMAC
 
+    Functional
+    1.Command 1060
+    2.Send Res,CommandLengthType to Almond
+
+<a name="1700"></a>
+## 16) Command 1700
+    Command 
+    1700- JSON format 
+    
+    Required 
+    Command,CommandType,almondMAC
+
+    Functional
+    1.Command 1700
+    2.Send Res,CommandLengthType to Almond
+
+<a name="1525"></a>
+## 17) Command 1525
+    Command 
+    1525- JSON format 
+    
+    Required 
+    Command,CommandType,almondMAC
+
+    Functional
+    1.Command 1525
+    2.Send Res,CommandLengthType to Almond
+
+<a name="300"></a>
+## 18) Command 300
+    Command 
+    300- XML format 
+    
+    Required 
+    Command,CommandType,almondMAC
+
+    Functional
+    1.Command 300
+    2.Send Res,CommandLengthType to Almond
+
+<a name="4"></a>
+## 19) Command 4
+    Command 
+    4- XML format 
+    
+    Required 
+    Command,CommandType,almondMAC
+
+    Functional
+    1.Command 4
+    2.Send Res,CommandLengthType to Almond
+
+<a name="1026"></a>
+## 20) Command 1026
+    Command 
+    1026- JSON format 
+    
+    Required 
+    Command,CommandType,almondMAC
+
+    Functional
+    1.Command 300
+    2.Send Res,CommandLengthType to Almond
