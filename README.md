@@ -57,19 +57,19 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     Command no 
     1100- JSON format
  
-    Required 
+    REQUIRED - 
     Command,CommandType,ICID,Payload
 
-    Redis
+    REDIS -
     2.Get ICID_<packet.ICID>              //  value = null
 
-    Queue
-    3.send Response to queue from step 2
+    QUEUE -
+    3.send Response to QUEUE - from step 2
 
-    Functional 
+    FUNCTIONAL - 
     1.Command 1100
 
-    FLow:
+    FLOW -
     almondProtocol(packet)-> processor(do)->processor(validate)->almondUsers(dummyModel)->processor(dispatchResponses),processor(unicast)->broadcaster(unicast)
     
 <a name="1063"></a>
@@ -77,19 +77,19 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     Command no 
     1063- JSON format
  
-    Required 
+    REQUIRED - 
     Command,CommandType,ICID,Payload
 
-    Redis
+    REDIS -
     2.Get ICID_<packet.ICID>             // value = null
 
-    Queue
-    3.send Response to queue from step 2
+    QUEUE -
+    3.send Response to QUEUE - from step 2
 
-    Functional 
+    FUNCTIONAL - 
     1.Command 1063
 
-    FLow:
+    FLOW -
     almondProtocol(packet)-> processor(do)->processor(validate)->almondUsers(dummyModel)->processor(dispatchResponses),processor(unicast)->broadcaster(unicast)
     
 <a name="25"></a>
@@ -97,10 +97,10 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     Command no
     25- XML format
 
-    Required
+    REQUIRED -
     Command,ICID,Payload,AlmondMAC,CommandType
 
-    Sql
+    SQL -
     3.INSERT on AlmondUsers
       Parameters: userID,AlmondMAC,AlmondName,LongSecret,ownership,FirmwareVersion,AffiliationTS
     
@@ -124,7 +124,7 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     8.Select on UserTempPasswords
       Params: UserID
 
-    Redis
+    REDIS -
     2.Get CODE:<code>                 // value = null
     9.Perform multi:
      i. hmset on UID_<UserID>       // value = (PMAC_<AlmondMAC>,1)
@@ -134,16 +134,16 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     12.Get ICID_<packet.ICID>        // value = null
     14.hgetall on UID_<user_list>    // Returns all the queues for users in user_list
 
-    Queue
-    13.Send Response to queue from step 12 
+    QUEUE -
+    13.Send Response to Queue from step 12 
     15.Send Response to All Queues returned in Step 14
 
-    Functional
+    FUNCTIONAL -
     1.Command 25
     10.Delete affiliationStore[data.AlmondMAC]
     11.Send AffiliationAlmondCompleteResponse to Almond
 
-    Flow
+    FLOW -
     almondProtocol(packet)-> processor(do)->processor(validate)->almondUsers(affiliation_almond_complete),almondUsers(verify_affiliation_complete)-> processor(dispatchResponses),processor(unicast)->broadcaster(unicast)->processor(broadcaster)->broadcaster(send)
       
 <a name="63a"></a>
@@ -151,21 +151,21 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     Command no
     63- XML format
    
-    Required
+    REQUIRED -
     Command,ICID,UID,Payload
 
-    Redis
+    REDIS -
     2.Get ICID_<packet.ICID>              // value = null
     4.hgetall on UID_<user_list>          // Returns all the queues for users in user_list
 
-    Queue
-    3.Send Respose to queue from step 2
+    QUEUE -
+    3.Send Respose to QUEUE - from step 2
     5.Send Response to All Queues returned in Step 4
 
-    Functional
+    FUNCTIONAL -
     1.Command 63
 
-    Flow
+    FLOW -
     almondProtocol(packet)-> processor(do)->processor(validate)->almondUsers(dummyModel)->processor(dispatchResponses),processor(unicast)->broadcaster(unicast)  
  
 <a name="63b"></a>
@@ -173,21 +173,21 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     Command no
     63- XML format
    
-    Required
+    REQUIRED -
     Command,ICID,UID,Payload
 
-    Redis
+    REDIS -
     2.Get ICID_<packet.ICID>             //key = (M.ICID + packet.ICID), value = null
     4.hgetall on UID_<user_list>          // Returns all the queues for users in user_list
 
-    Queue
-    3.Send Response to queue from step 2
+    QUEUE -
+    3.Send Response to QUEUE - from step 2
     5.Send Response to All Queues returned in Step 4
 
-    Functional
+    FUNCTIONAL -
     1.Command 63
 
-    Flow
+    FLOW -
     almondProtocol(packet)-> processor(do)->processor(validate)->almondUsers(dummyModel)->processor(dispatchResponses),processor(unicast)->broadcaster(unicast)
 
 <a name="1050"></a>
@@ -195,22 +195,22 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     Command no
     1050- JSON format
    
-    Required
+    REQUIRED -
     Command,AlmondMAC,Payload,CommandType
 
-    Redis 
+    REDIS - 
     2.hmset AL_<AlmondMAC>              // value = [mapper.hashColumn, payload.HashNow]        
     5.hgetall on UID_<user_list>         // Returns all the queues for users in user_list
     
-    Queue
+    QUEUE -
     4.Send AlmondProperties to BACKGROUND_QUEUE 
     6.Send Response to All Queues returned in Step 5
 
-    Functional
+    FUNCTIONAL -
     1.Command 1050
     3.Send AlmondPropertiesResponse to Almond
 
-    Flow
+    FLOW -
     almondProtocol(packet)->processor(do)->processor(validate)->almondUsers(properties)->processor(dispatchResponses),processor(sendToBackground)->broadcaster(sendToBackground)
 
 <a name="1040"></a>
@@ -218,27 +218,27 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
      Command no
      1040- JSON format
 
-     Required
+     REQUIRED -
      Command,UID,AlmondMAC,Payload,CommandType
 
-     Redis
+     REDIS -
      2.hgetall on AL_<AlmondMAC>        // value = [mapper.hashColumn, payload.HashNow]
      5.Perform multi:
       i. hmset on UID_<UserID>      //key = (M.USER + UserID), value = (PMAC_<data.AlmondMAC>,1)
       ii. hmset on AL_<pMAC>        //key = (M.ALMOND + pMAC), value = (userID,key)
       iii. hdel on AL_<pMAC>        //key = (M.ALMOND + pMAC), value = [subscriptionToken]  
 
-     SQl     
+     SQL -     
      3.Select on AlmondUsers
        Parameters: AlmondMAC
      4.Select on AlmondSecondaryUsers
        Parameters: AlmondMAC
 
-     Functional
+     FUNCTIONAL -
      1.Command 1040
      6.Send AlmondHelloResponse to Almond
 
-     Flow
+     FLOW -
      almondProtocol(packet)->processor(do)->processor(validate)->almondUsers(almond_hello)->processor(dispatchResponses)
      
 <a name="31"></a>
@@ -246,10 +246,10 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
      Command no
      31- XML format
 
-     Required
+     REQUIRED -
      Command,UID,AlmondMAC,PayloadCommandType
 
-     Redis
+     REDIS -
      // value = [mapper.hashColumn, payload.HashNow]
      2.hgetall on AL_<AlmondMAC>          
 
@@ -258,17 +258,17 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
      ii. hmset on AL_<pMAC>        //key = (M.ALMOND + pMAC), value = (userID,key)
      iii. hdel on AL_<pMAC>        //key = (M.ALMOND + pMAC), value = [subscriptionToken]
 
-     SQl
+     SQL -
      3.Select on AlmondUsers
      Parameters: AlmondMAC
      4.Select on AlmondSecondaryUsers
      Parameters: AlmondMAC
 
-     Functional
+     FUNCTIONAL -
      1.Command 31
      6.Send AlmondHelloResponse to Almond
 
-     Flow
+     FLOW -
      almondProtocol(packet)->processor(do)->processor(validate)->almondUsers(almond_hello)->processor(dispatchResponses)
 
 <a name="DynamicCommands"></a>
@@ -278,22 +278,22 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     Command no
     1050- JSON format
    
-    Required
+    REQUIRED -
     Command,CommandType,AlmondMAC,Payload
 
-    Redis  
+    REDIS -  
     2.hmset AL_<AlmondMAC>              // value = [mapper.hashColumn, payload.HashNow]           
     5.hgetall on UID_<user_list>        // Returns all the queues for users in user_list
 
-    Queue
+    QUEUE -
     4.Send DynamicAlmondProperties to BACKGROUND_QUEUE
     6.Send Response to All Queues returned in Step 5
 
-    Functional
+    FUNCTIONAL -
     1.Command 1050
     3.Send DynamicAlmondPropertiesResponse to Almond
 
-    Flow
+    FLOW -
     almondProtocol(packet)->processor(do)->processor(validate)->almondUsers(properties)->processor(dispatchResponses),processor(sendToBackground)->broadcaster(sendToBackground)
 
 <a name="1200a"></a>
@@ -301,24 +301,24 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     Command no
     1200- JSON format
    
-    Required
+    REQUIRED -
     Command,UID,AlmondMAC,CommandType,Payload
 
-    Redis
+    REDIS -
     2.hmset on AL_<AlmondMAC>             // value = [mapper.hashColumn, payload.HashNow]
     7.hgetall on UID_<user_list>         // Returns all the queues for users in user_list
 
-    Queue
+    QUEUE -
     4.Send DynamicIndexUpdated to config.ALEXA_QUEUE
     6.Send DynamicIndexUpdated to BACKGROUND_QUEUE
     8.Send Response to All Queues returned in Step 7
 
-    Functional
+    FUNCTIONAL -
     1.Command 1200
     3.Send DynamicIndexUpdatedResponse to Almond
     5.delete packet.alexa
 
-    Flow
+    FLOW -
     almondProtocol(packet)-> processor(do)->processor(validate)->almondUsers(execute)->processor(dispatchResponses),processor(sendToBackground)->broadcaster(sendToBackground)->processor(broadcast)->broadcaster(send)
 
 <a name="1200b"></a>
@@ -326,22 +326,22 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     Command no
     1200- JSON format
    
-    Required
+    REQUIRED -
     Command,UID,CommandType,AlmondMAC,Payload
 
-    Redis
+    REDIS -
     2.hmset on AL_<AlmondMAC>              // value = [mapper.hashColumn, payload.HashNow]  
     5.hgetall on UID_<user_list>           // Returns all the queues for users in user_list
 
-    Queue
+    QUEUE -
     4.Send DynamicDeviceUpdated to BACKGROUND_QUEUE
     6.Send Response to All Queues returned in Step 5
 
-    Functional
+    FUNCTIONAL -
     1.Command 1200
     3.Send DynamicDeviceUpdatedResponse to Almond
 
-    Flow
+    FLOW -
     almondProtocol(packet)-> processor(do)->processor(validate)->almondUsers(execute)->processor(dispatchResponses),processor(sendToBackground)->broadcaster(sendToBackground)->processor(broadcast)->broadcaster(send)
 
 <a name="1300a"></a>
@@ -349,22 +349,22 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     Command no
     1300- JSON format
    
-    Required
+    REQUIRED -
     Command,UID,CommandType,Payload,AlmondMAC
 
-    Redis
+    REDIS -
     2.hmset on AL_<AlmondMAC>          // value = [mapper.hashColumn, payload.HashNow]     
     5.hgetall on UID_<user_list>       // Returns all the queues for users in user_list
 
-    Queue
+    QUEUE -
     4.Send DynamicSceneAdded to BACKGROUND_QUEUE
     6.Send Response to All Queues returned in Step 5
 
-    Functional
+    FUNCTIONAL -
     1.Command 1300
     3.Send DynamicSceneAddedResponse to Almond
 
-    Flow
+    FLOW -
     almondProtocol(packet)-> processor(do)->processor(validate)->almondUsers(execute)->processor(dispatchResponses),processor(sendToBackground)->broadcaster(sendToBackground)->processor(broadcast)->broadcaster(send)
 
 <a name="1300b"></a>
@@ -372,22 +372,22 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     Command no
     1300- JSON format
    
-    Required
+    REQUIRED -
     Command,UID,CommandType,Payload,AlmondMAC
 
-    Redis 
+    REDIS - 
     2.hmset on AL_<AlmondMAC>      // value = [mapper.hashColumn, payload.HashNow]        
     5.hgetall on UID_<user_list>       // Returns all the queues for users in user_list
 
-    Queue
+    QUEUE -
     4.Send DynamicSceneActivated to BACKGROUND_QUEUE
     6.Send Response to All Queues returned in Step 5
 
-    Functional
+    FUNCTIONAL -
     1.Command 1300
     3.Send DynamicSceneActivatedResponse to Almond
 
-    Flow
+    FLOW -
     almondProtocol(packet)-> processor(do)->processor(validate)->almondUsers(execute)->processor(dispatchResponses),processor(sendToBackground)->broadcaster(sendToBackground)->processor(broadcast)->broadcaster(send)
 
 <a name="1300c"></a>
@@ -395,22 +395,22 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     Command no
     1300- JSON format
    
-    Required
+    REQUIRED -
     Command,UID,CommandType,Payload,AlmondMAC
 
-    Redis   
+    REDIS -   
     2.hmset on AL_<AlmondMAC>          // value = [mapper.hashColumn, payload.HashNow]      
     5.hgetall on UID_<user_list>       // Returns all the queues for users in user_list
 
-    Queue
+    QUEUE -
     4.Send DynamicSceneUpdated to BACKGROUND_QUEUE
     6.Send Response to All Queues returned in Step 5
 
-    Functional
+    FUNCTIONAL -
     1.Command 1300
     3.Send DynamicSceneUpdatedResponse to Almond
 
-    Flow
+    FLOW -
     almondProtocol(packet)->processor(do)->processor(validate)->almondUsers(execute)->processor(dispatchResponses),processor(sendToBackground)->broadcaster(sendToBackground)->processor(broadcast)->broadcaster(send)
 
 <a name="1300d"></a>
@@ -418,22 +418,22 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     Command no
     1300- JSON format
    
-    Required
+    REQUIRED -
     Command,UID,CommandType,Payload,AlmondMAC
 
-    Redis
+    REDIS -
     2.hmset on AL_<AlmondMAC>          // value = [mapper.hashColumn, payload.HashNow]    
     5.hgetall on UID_<user_list>       // Returns all the queues for users in user_list
 
-    Queue
+    QUEUE -
     4.Send DynamicSceneRemoved to BACKGROUND_QUEUE
     6.Send Response to All Queues returned in Step 5
 
-    Functional
+    FUNCTIONAL -
     1.Command 1300
     3.Send DynamicSceneRemovedResponse to Almond
 
-    Flow
+    FLOW -
     almondProtocol(packet)->processor(do)->processor(validate)->almondUsers(execute)->processor(dispatchResponses),processor(sendToBackground)->broadcaster(sendToBackground)->processor(broadcast)->broadcaster(send)
 
 <a name="1300e"></a>
@@ -441,23 +441,22 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     Command no
     1300- JSON format
    
-    Required
+    REQUIRED -
     Command,UID,CommandType,Payload,AlmondMAC
 
-    Redis
-   
+    REDIS -  
     2.hmset on AL_<AlmondMAC>             // value = [mapper.hashColumn, payload.HashNow]       
     5.hgetall on UID_<user_list>         // Returns all the queues for users in user_list
 
-    Queue
+    QUEUE -
     4.Send DynamicAllSceneRemoved to BACKGROUND_QUEUE
     6.Send Response to All Queues returned in Step 5
 
-    Functional
+    FUNCTIONAL -
     1.Command 1300
     3.Send DynamicAllSceneRemovedResponse to Almond
 
-    Flow
+    FLOW -
     almondProtocol(packet)->processor(do)->processor(validate)->almondUsers(execute)->processor(dispatchResponses),processor(sendToBackground)->broadcaster(sendToBackground)->processor(broadcast)->broadcaster(send)
 
 <a name="1400a"></a>
@@ -465,22 +464,22 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     Command no
     1400- JSON format
 
-    Required
+    REQUIRED -
     Command,UID,CommandType,Payload,AlmondMAC
 
-    Redis
+    REDIS -
     2.hmset on AL_<AlmondMAC>               // value = [mapper.hashColumn, payload.HashNow]
     5.hgetall on UID_<user_list>            // Returns all the queues for users in user_list
 
-    Queue
+    QUEUE -
     4.Send DynamicRuleAdded to BACKGROUND_QUEUE
     6.Send Response to All Queues returned in Step 5
 
-    Functional
+    FUNCTIONAL -
     1.Command 1400
     3.Send DynamicRuleAddedResponse to Almond
 
-    Flow
+    FLOW -
     almondProtocol(packet)->processor(do)->processor(validate)->almondUsers(execute)->processor(dispatchResponses),processor(sendToBackground)->broadcaster(sendToBackground)->processor(broadcast)->broadcaster(send)
 
 <a name="1400b"></a>
@@ -488,22 +487,22 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     Command no
     1400- JSON format
 
-    Required
+    REQUIRED -
     Command,UID,CommandType,Payload,AlmondMAC
 
-    Redis  
+    REDIS -  
     2.hmset on AL_<AlmondMAC>              // value = [mapper.hashColumn, payload.HashNow]    
     5.hgetall on UID_<user_list>           // Returns all the queues for users in user_list
 
-    Queue
+    QUEUE -
     4.Send DynamicRuleUpdated to BACKGROUND_QUEUE
     6.Send Response to All Queues returned in Step 5
 
-    Functional
+    FUNCTIONAL -
     1.Command 1400
     3.Send DynamicRuleUpdatedResponse to Almond
 
-    Flow
+    FLOW -
     almondProtocol(packet)->processor(do)->processor(validate)->almondUsers(execute)->processor(dispatchResponses),processor(sendToBackground)->broadcaster(sendToBackground)->processor(broadcast)->broadcaster(send)
 
 <a name="1400c"></a>
@@ -511,22 +510,22 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     Command no
     1400- JSON format
 
-    Required
+    REQUIRED -
     Command,UID,CommandType,Payload,AlmondMAC
 
-    Redis
+    REDIS -
     2.hmset on AL_<AlmondMAC>           // value = [mapper.hashColumn, payload.HashNow]
     5.hgetall on UID_<user_list>        // Returns all the queues for users in user_list
 
-    Queue
+    QUEUE -
     4.Send DynamicRuleRemoved to BACKGROUND_QUEUE
     6.Send Response to All Queues returned in Step 5
 
-    Functional
+    FUNCTIONAL -
     1.Command 1400
     3.Send DynamicRuleRemovedResponse to Almond
 
-    Flow
+    FLOW -
     almondProtocol(packet)->processor(do)->processor(validate)->almondUsers(execute)->processor(dispatchResponses),processor(sendToBackground)->broadcaster(sendToBackground)->processor(broadcast)->broadcaster(send)
 
 <a name="1400d"></a>
@@ -534,22 +533,22 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     Command no
     1400- JSON format
 
-    Required
+    REQUIRED -
     Command,UID,CommandType,Payload,AlmondMAC
 
-    Redis
+    REDIS -
     2.hmset on AL_<AlmondMAC>           // value = [mapper.hashColumn, payload.HashNow]
     5.hgetall on UID_<user_list>        // Returns all the queues for users in user_list
 
-    Queue
+    QUEUE -
     4.Send DynamicAllRulesRemoved to BACKGROUND_QUEUE
     6.Send Response to All Queues returned in Step 5
 
-    Functional
+    FUNCTIONAL -
     1.Command 1400
     3.Send DynamicAllRulesRemovedResponse to Almond
 
-    Flow
+    FLOW -
     almondProtocol(packet)->processor(do)->processor(validate)->almondUsers(execute)->processor(dispatchResponses),processor(sendToBackground)->broadcaster(sendToBackground)->processor(broadcast)->broadcaster(send)
 
 <a name="1500a"></a>
@@ -557,22 +556,22 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     Command no
     1500- JSON format
 
-    Required
+    REQUIRED -
     Command,UID,CommandType,Payload,AlmondMAC
 
-    Redis    
+    REDIS -    
     2.hmset on AL_<AlmondMAC>           // value = [mapper.hashColumn, payload.HashNow]
     5.hgetall on UID_<user_list>        // Returns all the queues for users in user_list
 
-    Queue
+    QUEUE -
     4.Send DynamicClientAdded to BACKGROUND_QUEUE
     6.Send Response to All Queues returned in Step 5
 
-    Functional
+    FUNCTIONAL -
     1.Command 1500
     3.Send DynamicClientAddedResponse to Almond
 
-    Flow
+    FLOW -
     almondProtocol(packet)->processor(do)->processor(validate)->almondUsers(execute)->processor(dispatchResponses),processor(sendToBackground)->broadcaster(sendToBackground)->processor(broadcast)->broadcaster(send)
 
 <a name="1500b"></a>
@@ -580,22 +579,22 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     Command no
     1500- JSON format
 
-    Required
+    REQUIRED -
     Command,UID,CommandType,Payload,AlmondMAC
 
-    Redis  
+    REDIS -  
     2.hmset on AL_<AlmondMAC>              // value = [mapper.hashColumn, payload.HashNow]
     5.hgetall on UID_<user_list>           // Returns all the queues for users in user_list
 
-    Queue
+    QUEUE -
     4.Send DynamicClientUpdated to BACKGROUND_QUEUE
     6.Send Response to All Queues returned in Step 5
 
-    Functional
+    FUNCTIONAL -
     1.Command 1500
     3.Send DynamicClientUpdatedResponse to Almond
 
-    Flow
+    FLOW -
     almondProtocol(packet)-> processor(do)->processor(validate)->almondUsers(execute)->processor(dispatchResponses),processor(sendToBackground)->broadcaster(sendToBackground)->processor(broadcast)->broadcaster(send)
 
 <a name="1500c"></a>
@@ -603,22 +602,22 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     Command no
     1500- JSON format
 
-    Required
+    REQUIRED -
     Command,UID,CommandType,Payload,AlmondMAC
 
-    Redis   
+    REDIS -   
     2.hmset on AL_<AlmondMAC>          //value = [mapper.hashColumn, payload.HashNow]
     5.hgetall on UID_<user_list>       // Returns all the queues for users in user_list
 
-    Queue
+    QUEUE -
     4.Send DynamicClientRemoved to BACKGROUND_QUEUE
     6.Send Response to All Queues returned in Step 5
 
-    Functional
+    FUNCTIONAL -
     1.Command 1500
     3.Send DynamicClientRemovedResponse to Almond
 
-    Flow
+    FLOW -
     almondProtocol(packet)-> processor(do)->processor(validate)->almondUsers(execute)->processor(dispatchResponses),processor(sendToBackground)->broadcaster(sendToBackground)->processor(broadcast)->broadcaster(send)
 
 <a name="49"></a>
@@ -626,21 +625,21 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     Command no
     49- XML format
 
-    Required
+    REQUIRED -
     Command,UID,CommandType,Payload
 
-    Redis
+    REDIS -
     4.hgetall on UID_<user_list>       // Returns all the queues for users in user_list
 
-    Queue
+    QUEUE -
     3.Send DynamicAlmondNameChange to BACKGROUND_QUEUE
     5.Send Response to All Queues returned in Step 4
 
-    Functional
+    FUNCTIONAL -
     1.Command 49
     2.Send DynamicAlmondNameChangeResponse to Almond
 
-    Flow
+    FLOW -
     almondProtocol(packet)-> processor(do)->processor(validate)->almondUsers(dummyModel)->processor(dispatchResponses),processor(sendToBackground)->broadcaster(sendToBackground)->processor(broadcast)->broadcaster(send)
 
 <a name="153"></a>
@@ -648,21 +647,21 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     Command no
     153- XML format
 
-    Required
+    REQUIRED -
     Command,UID,CommandType,Payload
 
-    Redis
+    REDIS -
     4.hgetall on UID_<user_list>       // Returns all the queues for users in user_list
 
-    Queue
+    QUEUE -
     3.Send DynamicAlmondModeChange to BACKGROUND_QUEUE
     5.Send Response to All Queues returned in Step 4
 
-    Functional
+    FUNCTIONAL -
     1.Command 153
     2.Send DynamicAlmondModeChangeResponse to Almond
 
-    Flow
+    FLOW -
     almondProtocol(packet)-> processor(do)->processor(validate)->almondUsers(almondmode_change)->processor(dispatchResponses),processor(sendToBackground)->broadcaster(sendToBackground)->processor(broadcast)->broadcaster(send)
 
 <a name="1200c"></a>
@@ -670,22 +669,22 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     Command no
     1200- JSON format
 
-    Required
+    REQUIRED -
     Command,UID,CommandType,Payload
 
-    Redis   
+    REDIS -   
     2.hmset on AL_<AlmondMAC>          //value = [mapper.hashColumn, payload.HashNow]
     5.hgetall on UID_<user_list>        // Returns all the queues for users in user_list
 
-    Queue
+    QUEUE -
     4.Send DynamicDeviceList to BACKGROUND_QUEUE
     6.Send Response to All Queues returned in Step 5
 
-    Functional
+    FUNCTIONAL -
     1.Command 1200
     3.Send DynamicDeviceListResponse to Almond
 
-    Flow
+    FLOW -
     almondProtocol(packet)-> processor(do)->processor(validate)->almondUsers(execute)->processor(dispatchResponses),processor(sendToBackground)->broadcaster(sendToBackground)->processor(broadcast)->broadcaster(send)
 
 <a name="1200d"></a>
@@ -693,22 +692,22 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     Command no
     1200- JSON format
 
-    Required
+    REQUIRED -
     Command,UID,CommandType,Payload
 
-    Redis   
+    REDIS -   
     2.hmset on AL_<AlmondMAC>          //value = [mapper.hashColumn, payload.HashNow]
     5.hgetall on UID_<user_list>        // Returns all the queues for users in user_list
 
-    Queue
+    QUEUE -
     4.Send DynamicDevieAdded to BACKGROUND_QUEUE
     6.Send Response to All Queues returned in Step 5
 
-    Functional
+    FUNCTIONAL -
     1.Command 1200
     3.Send DynamicDeviceAddedResponse to Almond
 
-    Flow
+    FLOW -
     almondProtocol(packet)-> processor(do)->processor(validate)->almondUsers(execute)->processor(dispatchResponses),processor(sendToBackground)->broadcaster(sendToBackground)->processor(broadcast)->broadcaster(send)
 
 <a name="1200e"></a>
@@ -716,22 +715,22 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     Command no
     1200- JSON format
 
-    Required
+    REQUIRED -
     Command,UID,CommandType,Payload
 
-    Redis   
+    REDIS -   
     2.hmset on AL_<AlmondMAC>          //value = [mapper.hashColumn, payload.HashNow]
     5.hgetall on UID_<user_list>        // Returns all the queues for users in user_list
 
-    Queue
+    QUEUE -
     4.Send DynamicAllDevicesRemoved to BACKGROUND_QUEUE
     6.Send Response to All Queues returned in Step 5
 
-    Functional
+    FUNCTIONAL -
     1.Command 1200
     3.Send DynamicAllDevicesRemovedResponse to Almond
 
-    Flow
+    FLOW -
     almondProtocol(packet)-> processor(do)->processor(validate)->almondUsers(execute)->processor(dispatchResponses),processor(sendToBackground)->broadcaster(sendToBackground)->processor(broadcast)->broadcaster(send)
 
 <a name="1200f"></a>
@@ -739,22 +738,22 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     Command no
     1200- JSON format
 
-    Required
+    REQUIRED -
     Command,UID,CommandType,Payload
 
-    Redis   
+    REDIS -   
     2.hmset on AL_<AlmondMAC>          //value = [mapper.hashColumn, payload.HashNow]
     5.hgetall on UID_<user_list>        // Returns all the queues for users in user_list
 
-    Queue
+    QUEUE -
     4.Send DynamicDeviceRemoved to BACKGROUND_QUEUE
     6.Send Response to All Queues returned in Step 5
 
-    Functional
+    FUNCTIONAL -
     1.Command 1200
     3.Send DynamicDeviceRemovedResponse to Almond
 
-    Flow
+    FLOW -
     almondProtocol(packet)-> processor(do)->processor(validate)->almondUsers(execute)->processor(dispatchResponses),processor(sendToBackground)->broadcaster(sendToBackground)->processor(broadcast)->broadcaster(send)
 
 <a name="1500d"></a>
@@ -762,22 +761,22 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     Command no
     1500- JSON format
 
-    Required
+    REQUIRED -
     Command,UID,CommandType,Payload
 
-    Redis    
+    REDIS -    
     2.hmset on AL_<AlmondMAC>           // value = [mapper.hashColumn, payload.HashNow]
     5.hgetall on UID_<user_list>        // Returns all the queues for users in user_list
 
-    Queue
+    QUEUE -
     4.Send DynamicClientList to BACKGROUND_QUEUE
     6.Send Response to All Queues returned in Step 5
 
-    Functional
+    FUNCTIONAL -
     1.Command 1500
     3.Send DynamicClientListResponse to Almond
 
-    Flow
+    FLOW -
     almondProtocol(packet)->processor(do)->processor(validate)->almondUsers(execute)->processor(dispatchResponses),processor(sendToBackground)->broadcaster(sendToBackground)->processor(broadcast)->broadcaster(send)
 
 <a name="1500e"></a>
@@ -785,22 +784,22 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     Command no
     1500- JSON format
 
-    Required
+    REQUIRED -
     Command,UID,CommandType,Payload
 
-    Redis    
+    REDIS -    
     2.hmset on AL_<AlmondMAC>           // value = [mapper.hashColumn, payload.HashNow]
     5.hgetall on UID_<user_list>        // Returns all the queues for users in user_list
 
-    Queue
+    QUEUE -
     4.Send DynamicAllClientsRemoved to BACKGROUND_QUEUE
     6.Send Response to All Queues returned in Step 5
 
-    Functional
+    FUNCTIONAL -
     1.Command 1500
     3.Send DynamicAllClientsRemovedResponse to Almond
 
-    Flow
+    FLOW -
     almondProtocol(packet)->processor(do)->processor(validate)->almondUsers(execute)->processor(dispatchResponses),processor(sendToBackground)->broadcaster(sendToBackground)->processor(broadcast)->broadcaster(send)
 
 <a name="1500f"></a>
@@ -808,22 +807,22 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     Command no
     1500- JSON format
 
-    Required
+    REQUIRED -
     Command,UID,CommandType,Payload
 
-    Redis    
+    REDIS -    
     2.hmset on AL_<AlmondMAC>           // value = [mapper.hashColumn, payload.HashNow]
     5.hgetall on UID_<user_list>        // Returns all the queues for users in user_list
 
-    Queue
+    QUEUE -
     4.Send DynamicClientJoined to BACKGROUND_QUEUE
     6.Send Response to All Queues returned in Step 5
 
-    Functional
+    FUNCTIONAL -
     1.Command 1500
     3.Send DynamicClientJoinedResponse to Almond
 
-    Flow
+    FLOW -
     almondProtocol(packet)->processor(do)->processor(validate)->almondUsers(execute)->processor(dispatchResponses),processor(sendToBackground)->broadcaster(sendToBackground)->processor(broadcast)->broadcaster(send)
 
 <a name="1500g"></a>
@@ -831,22 +830,22 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     Command no
     1500- JSON format
 
-    Required
+    REQUIRED -
     Command,UID,CommandType,Payload
 
-    Redis    
+    REDIS -    
     2.hmset on AL_<AlmondMAC>           // value = [mapper.hashColumn, payload.HashNow]
     5.hgetall on UID_<user_list>        // Returns all the queues for users in user_list
 
-    Queue
+    QUEUE -
     4.Send DynamicClientLeft to BACKGROUND_QUEUE
     6.Send Response to All Queues returned in Step 5
 
-    Functional
+    FUNCTIONAL -
     1.Command 1500
     3.Send DynamicClientLeftResponse to Almond
 
-    Flow
+    FLOW -
     almondProtocol(packet)->processor(do)->processor(validate)->almondUsers(execute)->processor(dispatchResponses),processor(sendToBackground)->broadcaster(sendToBackground)->processor(broadcast)->broadcaster(send)
 
 <a name="8"></a>
@@ -854,21 +853,21 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     Command no
     8- XML format
 
-    Required
+    REQUIRED -
     Command,CommandType,Payload
 
-    Redis
+    REDIS -
     4.hgetall on UID_<user_list>       // Returns all the queues for users in user_list
 
-    Queue
+    QUEUE -
     3.Send CloudReset to BACKGROUND_QUEUE
     5.Send Response to All Queues returned in Step 4
 
-    Functional
+    FUNCTIONAL -
     1.Command 8
     2.Send CloudResetResponse to Almond
 
-    Flow
+    FLOW -
     almondProtocol(packet)-> processor(do)->processor(validate)->almondUsers(almondReset)->processor(dispatchResponses)->processor(sendToBackground)->broadcaster(sendToBackground)->processor(broadcast)->broadcaster(send)
 
 <a name="21"></a>
@@ -876,10 +875,10 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     Command no
     21- XML format
 
-    Required
+    REQUIRED -
     Command,CommandType,Payload,ALmondMAC
 
-    SQl
+    SQL -
     2.Select on AlmondUsers
       params: AlmondMAC, ownership
     3.Select on AllAlmondPlus
@@ -887,16 +886,16 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     4.Insert on AllAlmondPlus
       params: AlmondMAC, AlmondID, FactoryDate, FactoryAdmin
 
-    Redis
+    REDIS -
     5.hgetall on CODE:code                  // where code = random string 
     6.setex on CODE:code  
-    // where code = random string,values =AlmondMAC + config.Connections.RabbitMQ.Queue
+    // where code = random string,values =AlmondMAC + config.Connections.RabbitMQ.QUEUE -
 
-    Functional
+    FUNCTIONAL -
     1.Command 21
     7.Send AffiliationAlmondRequestResponse to Almond
 
-    Flow
+    FLOW -
     almondProtocol(packet)-> processor(do)->processor(validate)->almondUsers(affiliation_almond)->affiliate-almond(affiliate_almond)->processor(dispatchResponses)
 
 <a name="104"></a>
@@ -904,22 +903,22 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     Command no
     104- XML format
 
-    Required
+    REQUIRED -
     Command,CommandType,Payload,AlmondMAC
 
-    Redis
-    3.hmset on AL_<AlmondMAC>        // values = status,1,server,config.Connections.RabbitMQ.Queue
+    REDIS -
+    3.hmset on AL_<AlmondMAC>        // values = status,1,server,config.Connections.RabbitMQ.QUEUE -
 
     // if (socket.zenAlmond)
-    Cassandra
+    CASSANDRA -
     4.Update on cloudlogs.connection_log
       params: dateyear, mac
      
-    Functional
+    FUNCTIONAL -
     1.Command 104
     2.delete socket.almondOnline
 
-    Flow
+    FLOW -
     almondProtocol(packet)-> processor(do)->processor(validate)->almondStore(keepAlive)
 
 <a name="1030"></a>
@@ -927,14 +926,14 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     Command no
     1030- JSON format
 
-    Required
+    REQUIRED -
     Command,CommandType,Payload,AlmondMAC
 
-    Functional
+    FUNCTIONAL -
     1.Command 1030
     2.Send AlmondResetResponse to Almond
 
-    Flow
+    FLOW -
     almondProtocol(packet)-> processor(do)->processor(validate)->almondUsers(almondReset)->processor(dispatchResponses)
 
 ------------------------------------------------------------------------------------------------
@@ -946,10 +945,10 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     Command no
     26- XML format
 
-    Required
+    REQUIRED -
     Command,Payload,ICID,unicastID,AlmondMAC
 
-    Functional
+    FUNCTIONAL -
     1.Command 26
     2.Send Res,CommandLengthType to Almond
 
@@ -958,10 +957,10 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     Command no 
     1062- JSON format
 
-    Required
+    REQUIRED -
     Command,Payload,ICID,unicastID,AlmondMAC
 
-    Functional
+    FUNCTIONAL -
     1.Command 1062
     2.Send Res,CommandLengthType to Almond
 
@@ -970,16 +969,16 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     Command no 
     1110- JSON format
 
-    Required
+    REQUIRED -
     Command,Payload,ICID,unicastID,AlmondMAC
 
-    Redis
+    REDIS -
     2.get on ICID_<unicastID>        
 
-    Queue
+    QUEUE -
     3.Send Response to queue
 
-    Functional
+    FUNCTIONAL -
     1.Command 1100
     4.Append result.almondMAC to offlineMACS.txt
 
@@ -988,16 +987,16 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     Command no 
     62- XML format
  
-    Required 
+    REQUIRED - 
     Command,CommandType,ICID,Payload
 
-    Redis
+    REDIS -
     2.get on ICID_<unicastID>          
 
-    Queue
+    QUEUE -
     3.Send Response to queue
  
-    Functional
+    FUNCTIONAL -
     1.Command 62
     4.Append result.almondMAC to offlineMACS.txt
 
@@ -1006,10 +1005,10 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     Command no
     1020- JSON format
 
-    Required
+    REQUIRED -
     Command,Payload,ICID,unicastID,AlmondMAC          
 
-    Functional
+    FUNCTIONAL -
     1.Command 1020
     2.Send Res,CommandLengthType to Almond
 
@@ -1018,31 +1017,31 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     Command no & CommandType
     1200- JSON format,alexaLinking
 
-    Required
+    REQUIRED -
     CommandType,Payload,ICID,unicastID,AlmondMAC
 
-    Redis
+    REDIS -
     2.hmset on AL_<almondMAC>                // values = [alexa, true]           
 
-    Queue
+    QUEUE -
     3.Send alexaLinking to BACKGROUND_QUEUE
 
-    Functional
+    FUNCTIONAL -
     1.CommandType alexaLinking
     4.Send Res,CommandLengthType to Almond
 
 <a name="alexaUnLinking"></a>
 ## 7) CommandType alexaUnLinking (Command 1200)
     CommandType
-    alexaUnLinking - xml 
+    alexaUnLinking - XML 
 
-    Required
+    REQUIRED -
     CommandType,Payload,ICID,unicastID,AlmondMAC
     
-    Redis
+    REDIS -
     2.hdel on AL_<payload.almondMAC>        // values = [alexa]
 
-    Functional
+    FUNCTIONAL -
     1.CommandType alexaUnLinking
     3.delete socket.alexa
     4.Send Res,CommandLengthType to Almond
@@ -1052,66 +1051,66 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     Command no
     9999- JSON format
 
-    Required
+    REQUIRED -
     Command,Payload,ICID,unicastID,AlmondMAC             
 
-    Functional
+    FUNCTIONAL -
     1.Command 9999
     2.Send Res,CommandLengthType to Almond
     
 <a name="UpdateClient"></a>
 ## 9) CommandType UpdateClient
     CommandType 
-    UpdateClient - xml
+    UpdateClient - XML
    
-    Required
+    REQUIRED -
     Command,Payload,ICID,unicastID,AlmondMAC
 
-    Functional
+    FUNCTIONAL -
     1.CommandType UpdateClient 
     2.Send Res,CommandLengthType to Almond
 
 <a name="269"></a>
 ## 10) Id  269
     Command no 
-    269- JSON format
+    269- XML format
  
-    Required 
+    REQUIRED - 
     Command,CommandType,Payload
 
-    Redis
+    REDIS -
     // if(nodelay)
     3.hgetall on AL_<AlmondMAC>      
    
     4.hmset on AL_<AlmondMAC>       
-    /* values = [status,0,offline,Date,server,config.Connections.RabbitMQ.Queue] */
+    /* values = [status,0,offline,Date,server,config.Connections.RabbitMQ.QUEUE -] */
 
-    Queue
+    QUEUE -
     5.Send AlmondStatus to config.BACKGROUND_QUEUE
 
-    Functional
+    FUNCTIONAL -
     1.Id 269
     2.delete socketStore[socket.almondMAC]
 
 <a name="removeAll"></a>
 ## 11) Type removeAll
     Type 
-    removeAll - xml
+    removeAll - XML
 
-    Required 
+    REQUIRED - 
     Command,CommandType,Payload
 
-    Redis
+    REDIS -
     // if(nodelay)
 
     3.hgetall on AL_<AlmondMAC>    
     4.hmset on AL_<AlmondMAC>  
-    //values = [status,0,offline,Date,server,config.Connections.RabbitMQ.Queue]
+    //values = [status,0,offline,Date,server,config.Connections.RabbitMQ.QUEUE -]
 
-    Queue
+    QUEUE -
     5.Send AlmondStatus to config.BACKGROUND_QUEUE
 
-    Functional
+    FUNCTIONAL -
     1.Type removeAll
     2.delete socketStore[socket.almondMAC]
 
@@ -1120,10 +1119,10 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     Command 
     1030- JSON format 
     
-    Required 
+    REQUIRED - 
     Command,CommandType,almondMAC
 
-    Functional
+    FUNCTIONAL -
     1.Command 1030
 
     //if (ZEN.MACS.indexOf(parseInt(mac)) >= 0) 
@@ -1134,13 +1133,13 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     Command 
     2020- JSON format 
     
-    Required 
+    REQUIRED - 
     Command,CommandType,almondMAC
  
-    Queue
+    QUEUE -
     2.Send Response to config.Connections.RabbitMQ.Queue
     
-    Functional
+    FUNCTIONAL -
     1.Command 2020
 
 <a name="1110"></a>
@@ -1148,10 +1147,10 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     Command 
     1110- JSON format 
     
-    Required 
+    REQUIRED - 
     Command,CommandType,almondMAC
 
-    Functional
+    FUNCTIONAL -
     1.Command 1110
     2.Send Res,CommandLengthType to Almond
 
@@ -1160,10 +1159,10 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     Command 
     1060- JSON format 
     
-    Required 
+    REQUIRED - 
     Command,CommandType,almondMAC
 
-    Functional
+    FUNCTIONAL -
     1.Command 1060
     2.Send Res,CommandLengthType to Almond
 
@@ -1172,10 +1171,10 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     Command 
     1700- JSON format 
     
-    Required 
+    REQUIRED - 
     Command,CommandType,almondMAC
 
-    Functional
+    FUNCTIONAL -
     1.Command 1700
     2.Send Res,CommandLengthType to Almond
 
@@ -1184,10 +1183,10 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     Command 
     1525- JSON format 
     
-    Required 
+    REQUIRED - 
     Command,CommandType,almondMAC
 
-    Functional
+    FUNCTIONAL -
     1.Command 1525
     2.Send Res,CommandLengthType to Almond
 
@@ -1196,10 +1195,10 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     Command 
     300- XML format 
     
-    Required 
+    REQUIRED - 
     Command,CommandType,almondMAC
 
-    Functional
+    FUNCTIONAL -
     1.Command 300
     2.Send Res,CommandLengthType to Almond
 
@@ -1208,10 +1207,10 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     Command 
     4- XML format 
     
-    Required 
+    REQUIRED - 
     Command,CommandType,almondMAC
 
-    Functional
+    FUNCTIONAL -
     1.Command 4
     2.Send Res,CommandLengthType to Almond
 
@@ -1220,9 +1219,9 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     Command 
     1026- JSON format 
     
-    Required 
+    REQUIRED - 
     Command,CommandType,almondMAC
 
-    Functional
+    FUNCTIONAL -
     1.Command 300
     2.Send Res,CommandLengthType to Almond
