@@ -23,6 +23,11 @@ AddRule,ValidateRule,UpdateRule,RemoveRule,RemoveAllRules,UpdateClient,RemoveCli
 - [AffiliationAlmondRequest (Command 21)](#21)
 - [KeepAlive (Command 104)](#104)
 - [AlmondReset (Command 1030)](#1030)
+- [AffiliationAlmondRequest (Command 1020)](#1020a)
+- [AffiliationCompleteResponse (Command 1020)](#1020b)
+- [AlmondValidationRequest (Command 106)](#106)
+- [HashList (Command 1702)](#1702)
+- [ReadyToAddAsSlave,AddWiredSlaveMobile (Command 1600)](#1600)
 
 ------------------------------------------------------------------------------------------------
 - [Consumer commands:](#ConsumerCommands)
@@ -110,7 +115,6 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     5.Select on Subscriptions
       params: AlmondMAC
 
-
     // if ((rsData.CMSCode && sRows[i].CMSCode == rsData.CMSCode) || (!rsData.CMSCode &&
     !sRows[i].CMSCode))
     6.Update on Subscriptions
@@ -118,7 +122,7 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
 
     //else
     7.Update on Subscriptions
-      Params: AlmondMAC,USerID
+      Params: AlmondMAC,UserID
 
     //check alexa compatible
     8.Select on UserTempPasswords
@@ -889,7 +893,7 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
     REDIS -
     5.hgetall on CODE:code                  // where code = random string 
     6.setex on CODE:code  
-    // where code = random string,values =AlmondMAC + config.Connections.RabbitMQ.QUEUE -
+    // where code = random string,values =AlmondMAC + config.Connections.RabbitMQ.Queue
 
     FUNCTIONAL -
     1.Command 21
@@ -935,6 +939,145 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
 
     FLOW -
     almondProtocol(packet)-> processor(do)->processor(validate)->almondUsers(almondReset)->processor(dispatchResponses)
+
+<a name="1020a"></a>
+## 14) AffiliationAlmondRequest (Command 1020)
+    Command no
+    1020- JSON format
+
+    REQUIRED -
+    Command,CommandType,Payload,AlmondMAC
+
+    SQL -
+    2.Select on AlmondUsers
+      params: AlmondMAC, ownership
+    3.Select on AllAlmondPlus
+      params:AlmondMAC
+    4.Insert on AllAlmondPlus
+      params: AlmondMAC, AlmondID, FactoryDate, FactoryAdmin
+
+    REDIS -
+    5.hgetall on CODE:code                  // where code = random string 
+    6.setex on CODE:code  
+    // where code = random string,values =AlmondMAC + config.Connections.RabbitMQ.Queue
+
+    FUNCTIONAL -
+    1.Command 1020
+    7.Send AffiliationAlmondRequestResponse to Almond
+
+    FLOW -
+    almondProtocol(packet)-> processor(do)->processor(validate)->almondUsers(affiliation_almond)->affiliate-almond(affiliate_almond)->processor(dispatchResponses)
+
+<a name="1020b"></a>
+## 15) AffiliationCompleteResponse (Command 1020)
+    Command no
+    1020- JSON format
+
+    REQUIRED -
+    Command,CommandType,Payload,AlmondMAC
+
+    SQL -
+    3.INSERT on AlmondUsers
+      Parameters: userID,AlmondMAC,AlmondName,LongSecret,ownership,FirmwareVersion,AffiliationTS
+    
+    // If(rows are affected)
+    4.INSERT on AlmondProperties2
+      Parameters: AlmondMAC,Properties,MobileProperties
+    5.Select on Subscriptions
+      params: AlmondMAC
+
+    // if ((rsData.CMSCode && sRows[i].CMSCode == rsData.CMSCode) || (!rsData.CMSCode &&
+    !sRows[i].CMSCode))
+    6.Update on Subscriptions
+      params: AlmondMAC, UserID
+
+    //else
+    7.Update on Subscriptions
+      Params: AlmondMAC,UserID
+
+    //check alexa compatible
+    8.Select on UserTempPasswords
+      Params: UserID
+
+    REDIS -
+    2.Get CODE:<code>                 // value = null
+    9.Perform multi:
+     i. hmset on UID_<UserID>       // value = (PMAC_<AlmondMAC>,1)
+     ii. hmset on AL_<pMAC>         // value = (userID,key)
+     iii. hdel on AL_<pMAC>         // value = [subscriptionToken]
+
+    12.Get ICID_<packet.ICID>        // value = null
+    14.hgetall on UID_<user_list>    // Returns all the queues for users in user_list
+
+    QUEUE -
+    13.Send Response to Queue from step 12 
+    15.Send Response to All Queues returned in Step 14
+
+    FUNCTIONAL -
+    1.Command 1020
+    10.Delete affiliationStore[data.AlmondMAC]
+    11.Send AffiliationAlmondCompleteResponse to Almond
+
+    FLOW -
+    almondProtocol(packet)-> processor(do)->processor(validate)->almondUsers(affiliation_almond_complete),almondUsers(verify_affiliation_complete)-> processor(dispatchResponses),processor(unicast)->broadcaster(unicast)->processor(broadcaster)->broadcaster(send)
+
+<a name="106"></a>
+## 16) AlmondValidationRequest (Command 106)
+    Command no
+    106- XML format
+
+    REQUIRED -
+    Command,CommandType,Payload,AlmondMAC
+    
+    SQL -
+    2. Select on AllAlmondPlus
+       params:  AlmondMAC
+
+    FUNCTIONAL -
+    1.Command 106
+    3.Send AlmondValidationRequestResponse to Almond
+
+    FLOW -
+    almondProtocol(packet)-> processor(do)->processor(validate)->almondUsers(Almond_Validate)-> processor(dispatchResponses)
+
+<a name="1702"></a>
+## 17) HashList (Command 1702)
+    Command no
+    1702- JSON format
+
+    REQUIRED -
+    Command,CommandType,Payload,AlmondMAC
+    
+    REDIS -
+    3.hmset on AL_<AlmondMAC>        // values = [router, payload.RouterMode = '%s']
+
+    FUNCIONAL -
+    1.Command 1702
+    2.delete socket[i]     // i = number of sockets
+    4.Send HashListResponse to Almond
+
+    FLOW -
+    almondProtocol(packet)-> processor(do)->processor(validate)->almondUsers(checkAllHash)-> processor(dispatchResponses)
+
+<a name="1600"></a>
+## 18) ReadyToAddAsSlave,AddWiredSlaveMobile (Command 1600)
+    Command no
+    1600- JSON format
+
+    REQUIRED -
+    Command,CommandType,Payload,AlmondMAC
+    
+    REDIS
+    2.hgetall on UID_<user_list>    // Returns all the queues for users in user_list
+
+    QUEUE -
+    3.Send Response to All Queues returned in Step 2
+
+    FUNCTIONAL -
+    1.Command 1600
+    
+    FLOW -
+    almondProtocol(packet)-> processor(do)->processor(validate)->almondUsers(dummyModel)->processor(broadcaster)->broadcaster(send)
 
 ------------------------------------------------------------------------------------------------
 
