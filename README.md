@@ -240,10 +240,9 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
 
      FUNCTIONAL -
      1.Command 1040
-     6.Send AlmondHelloResponse to Almond
 
      FLOW -
-     almondProtocol(packet)->processor(do)->processor(validate)->almondUsers(almond_hello)->processor(dispatchResponses)
+     almondProtocol(packet)->processor(do)->processor(validate)->almondUsers(almond_hello)
      
 <a name="31"></a>
 ## 8) AlmondHello (Command 31)
@@ -270,10 +269,9 @@ RemoveClient,ChangeAlmondProperties (Command 1062)](#1062)
 
      FUNCTIONAL -
      1.Command 31
-     6.Send AlmondHelloResponse to Almond
 
      FLOW -
-     almondProtocol(packet)->processor(do)->processor(validate)->almondUsers(almond_hello)->processor(dispatchResponses)
+     almondProtocol(packet)->processor(do)->processor(validate)->almondUsers(almond_hello)
 
 <a name="DynamicCommands"></a>
 ## 9) DynamicCommands
